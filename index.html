@@ -1,212 +1,142 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width initial-scale=1" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Ahmed Soliman | Biomedical AI Researcher</title>
-
-  <!-- Materialize CSS -->
-  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/materialize/0.95.3/css/materialize.min.css" />
-  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" />
-  <link rel="stylesheet" href="/assets/css/style.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
+<body class="bg-gray-50 text-gray-800">
 
-<body>
-  <!-- Navigation Menu -->
-  <nav class="hide-on-small-only">
-    <ul class="side-nav fixed section table-of-contents">
-      <li class="logo">
-        <a id="logo-container" href="#intro" class="brand-logo">
-          <img src="/assets/img/profile.png" class="circle img-responsive profile-pic" alt="avatar">
-        </a>
-      </li>
-      <li class="bold"><a href="#about" class="waves-effect teal-text"><i class="mdi-social-person small"></i>About</a></li>
-      <li class="bold"><a href="#research" class="waves-effect teal-text"><i class="mdi-action-description small"></i>Research</a></li>
-      <li class="bold"><a href="#experience" class="waves-effect teal-text"><i class="mdi-action-trending-up small"></i>Experience</a></li>
-      <li class="bold"><a href="#projects" class="waves-effect teal-text"><i class="mdi-av-my-library-books small"></i>Projects</a></li>
-      <li class="bold"><a href="#skills" class="waves-effect teal-text"><i class="mdi-action-assessment small"></i>Skills</a></li>
-      <li class="bold"><a href="#education" class="waves-effect teal-text"><i class="mdi-social-school small"></i>Education</a></li>
-      <li class="bold"><a href="#awards" class="waves-effect teal-text"><i class="mdi-action-grade small"></i>Awards</a></li>
-      <li class="bold"><a href="#contact" class="waves-effect teal-text"><i class="mdi-content-mail small"></i>Contact</a></li>
-    </ul>
-  </nav>
+<!-- Hero Section -->
+<header class="bg-gradient-to-r from-teal-600 to-cyan-600 text-white">
+  <div class="max-w-6xl mx-auto px-6 py-20 text-center">
+    <h1 class="text-4xl md:text-6xl font-bold mb-4">Ahmed Soliman</h1>
+    <p class="text-xl md:text-2xl mb-6">Biomedical AI Researcher | Computer Vision & Neuroimaging</p>
+    <p class="mb-8 max-w-3xl mx-auto">Senior Biomedical Engineering student at Cairo University specializing in AI for neuroimaging, computer vision, and biomedical signal processing.</p>
+    <div class="flex justify-center gap-4">
+      <a href="https://linkedin.com/in/ahmed-mohamed-aldeeb" target="_blank" class="bg-white text-teal-700 px-4 py-2 rounded shadow hover:bg-gray-200">LinkedIn</a>
+      <a href="https://github.com/AhmedXAlDeeb" target="_blank" class="bg-white text-teal-700 px-4 py-2 rounded shadow hover:bg-gray-200">GitHub</a>
+      <a href="mailto:ahmed.mohammed031@eng-st.cu.edu.eg" class="bg-white text-teal-700 px-4 py-2 rounded shadow hover:bg-gray-200">Email</a>
+    </div>
+  </div>
+</header>
 
-  <main>
-    <!-- Intro Section -->
-    <section id="intro" class="section scrollspy full-height">
-      <div class="container">
-        <div class="content section-padding valign">
-          <div class="caption">
-            <h2>Hi, I'm <span class="teal">Ahmed Soliman</span></h2>
-            <h5 style="color:#fff">
-              A <span class="typing" style="font-weight: 300; color:#004d40"></span>
-            </h5>
-            <h5>Senior Biomedical Engineering student at Cairo University, specializing in AI for neuroimaging, computer vision, and biomedical signal processing.</h5>
-          </div>
-          <div class="social">
-            <a href="https://linkedin.com/in/ahmed-mohamed-aldeeb" target="_blank"><button class="icon-btn linkedin"><i class="fa fa-linkedin"></i></button></a>
-            <a href="https://github.com/AhmedXAlDeeb" target="_blank"><button class="icon-btn github"><i class="fa fa-github"></i></button></a>
-          </div>
-          <div class="buttons">
-            <a href="#about" class="readme">Read More</a>
-            <a href="#contact" class="contactme">Contact Me</a>
-          </div>
-        </div>
-      </div>
-    </section>
+<!-- About -->
+<section id="about" class="max-w-6xl mx-auto px-6 py-12">
+  <h2 class="text-3xl font-bold text-teal-700 mb-4">About</h2>
+  <p class="mb-4">
+    I am passionate about applying artificial intelligence to brain imaging and healthcare. My research spans computer vision, fMRI analysis, and multimodal biomedical signal processing. 
+    I have conducted projects on fMRI-based cognitive stability, EEG brain-computer interfaces, and AI-generated image detection.
+  </p>
+  <p><b>Current Focus:</b> Adapting diffusion models for brain decoding and cognitive state classification.</p>
+</section>
 
-    <!-- About -->
-    <section id="about" class="section scrollspy">
-      <h3 class="page-title white-text teal">About</h3>
-      <div class="container flow-text">
-        <p>
-          I am a Biomedical Engineering senior at Cairo University passionate about applying artificial intelligence to brain imaging and healthcare. My work spans computer vision, neuroimaging analysis, and multimodal biomedical signal processing. I have conducted research on fMRI-based cognitive stability, EEG-based brain-computer interfaces, and AI-generated image detection.
-        </p>
-        <p>
-          <b>Current Focus:</b> Adapting diffusion models for brain decoding and cognitive state classification.
-        </p>
-      </div>
-    </section>
+<!-- Education -->
+<section id="education" class="max-w-6xl mx-auto px-6 py-12 bg-white shadow-sm rounded-lg">
+  <h2 class="text-3xl font-bold text-teal-700 mb-4">Education</h2>
+  <div>
+    <h3 class="text-xl font-semibold">B.Sc. in Systems and Biomedical Engineering</h3>
+    <p class="text-gray-600">Cairo University — Expected 2026</p>
+    <p>cGPA: 3.41</p>
+    <p class="mt-2 text-sm"><b>Relevant Coursework:</b> Medical Image Processing, Deep Learning, Computer Vision, Digital Signal Processing</p>
+  </div>
+</section>
 
-    <!-- Research -->
-    <section id="research" class="section scrollspy">
-      <h3 class="page-title white-text teal">Research & Publications</h3>
-      <div class="container">
-        <div class="card">
-          <div class="card-content">
-            <span class="card-title">Real-Time Student Drowsiness Detection Using CNN and Spatial Transformers</span>
-            <p>Preprint | Developed an AI system to detect drowsiness during online learning using ResNet-18 and spatial transformers.</p>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-content">
-            <span class="card-title">Detecting Student Disengagement in Online Classes: A Review</span>
-            <p>Systematic review of 38 studies on deep learning-based engagement monitoring.</p>
-          </div>
-        </div>
-      </div>
-    </section>
+<!-- Research & Publications -->
+<section id="research" class="max-w-6xl mx-auto px-6 py-12">
+  <h2 class="text-3xl font-bold text-teal-700 mb-6">Research & Publications</h2>
+  <div class="space-y-6">
+    <div>
+      <h3 class="font-semibold text-lg">Real-Time Student Drowsiness Detection Using CNN and Spatial Transformers</h3>
+      <p class="text-sm text-gray-600">Preprint | Developed a ResNet-18 + spatial transformer model achieving 95% accuracy for online learning engagement monitoring.</p>
+    </div>
+    <div>
+      <h3 class="font-semibold text-lg">Detecting Student Disengagement in Online Classes: A Review</h3>
+      <p class="text-sm text-gray-600">Systematic review of 38 studies highlighting deep learning models for real-time engagement monitoring.</p>
+    </div>
+  </div>
+</section>
 
-    <!-- Experience -->
-    <section id="experience" class="section scrollspy">
-      <h3 class="page-title white-text teal">Experience</h3>
-      <div class="container">
-        <!-- Example Card -->
-        <div class="card">
-          <div class="card-content">
-            <span class="card-title">Computer Vision Research Assistant</span>
-            <p>Nile University – Center for Informatics Science | Feb 2024 – Present</p>
-            <ul>
-              <li>Researched early detection of papilledema from fundus images.</li>
-              <li>Developed segmentation and classification pipelines, collaborating with clinicians.</li>
-            </ul>
-          </div>
-        </div>
-        <!-- Add all other internships here in same format -->
-      </div>
-    </section>
+<!-- Projects -->
+<section id="projects" class="max-w-6xl mx-auto px-6 py-12 bg-white shadow-sm rounded-lg">
+  <h2 class="text-3xl font-bold text-teal-700 mb-6">Selected Projects</h2>
+  <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="border rounded-lg p-4">
+      <h3 class="font-semibold">Cognitive Stability fMRI Analysis</h3>
+      <p class="text-sm">Applied FSL GLM pipeline on Flanker task dataset for multi-level group analysis and ROI extraction.</p>
+      <a href="https://drive.google.com/file/d/1sOkPCtCOFXop4OAl3YEE0gb_uEfSFfhy/view?usp=sharing" target="_blank" class="text-teal-600 text-sm">View</a>
+    </div>
+    <div class="border rounded-lg p-4">
+      <h3 class="font-semibold">Multimodal PCG-ECG Stress Detection</h3>
+      <p class="text-sm">Developed stress classification pipeline using PCG & ECG achieving 80% accuracy with Random Forest.</p>
+      <a href="https://github.com/AhmedXAlDeeb/Cardiovascular_Multimodal_Learning-" target="_blank" class="text-teal-600 text-sm">Code</a>
+    </div>
+    <div class="border rounded-lg p-4">
+      <h3 class="font-semibold">AI-Generated Image Detection via Fingerprint Extraction</h3>
+      <p class="text-sm">Detection of synthetic images from Diffusion, GAN, and CNN using high-frequency artifact analysis.</p>
+      <a href="https://github.com/mistaluai/DeepSee" target="_blank" class="text-teal-600 text-sm">Code</a>
+    </div>
+  </div>
+</section>
 
-    <!-- Projects -->
-    <section id="projects" class="section scrollspy">
-      <h3 class="page-title white-text teal">Projects</h3>
-      <div class="container">
-        <div class="row">
-          <!-- Example project card -->
-          <div class="col s12 m6 l4">
-            <div class="card medium">
-              <div class="card-image"><img src="/assets/img/project-fmri.jpg" alt="fMRI Analysis"></div>
-              <div class="card-content">
-                <span class="card-title teal-text">Cognitive Stability fMRI Analysis</span>
-                <p>Applied GLM in FSL for 1st–3rd level analysis of Flanker task data; performed ROI analysis.</p>
-              </div>
-              <div class="card-action">
-                <a href="https://drive.google.com/file/d/1sOkPCtCOFXop4OAl3YEE0gb_uEfSFfhy/view?usp=sharing" target="_blank">View</a>
-              </div>
-            </div>
-          </div>
-          <!-- Repeat for other projects -->
-        </div>
-      </div>
-    </section>
+<!-- Experience -->
+<section id="experience" class="max-w-6xl mx-auto px-6 py-12">
+  <h2 class="text-3xl font-bold text-teal-700 mb-6">Experience</h2>
+  <div class="space-y-6">
+    <div>
+      <h3 class="font-semibold">Computer Vision Research Assistant</h3>
+      <p class="text-sm text-gray-600">Nile University — Feb 2024 – Present</p>
+      <ul class="list-disc list-inside text-sm">
+        <li>Researched early detection of papilledema from fundus images.</li>
+        <li>Developed deep learning segmentation and classification pipelines.</li>
+      </ul>
+    </div>
+    <div>
+      <h3 class="font-semibold">Data Science Intern</h3>
+      <p class="text-sm text-gray-600">Synapse Analytics — Jul 2024 – Sep 2024</p>
+      <ul class="list-disc list-inside text-sm">
+        <li>Built and deployed ML models for credit scoring and churn prediction.</li>
+        <li>Worked with Dockerized production pipelines.</li>
+      </ul>
+    </div>
+  </div>
+</section>
 
-    <!-- Skills -->
-    <section id="skills" class="section scrollspy">
-      <h3 class="page-title white-text teal">Skills</h3>
-      <div class="container">
-        <div class="card">
-          <div class="card-content">
-            <h4>Programming</h4>
-            Python, C/C++, SQL, Java
-            <h4>AI/ML</h4>
-            PyTorch, TensorFlow, Transformers, Diffusion Models
-            <h4>Biomedical Imaging</h4>
-            FSL, OpenCV, VTK
-            <h4>Tools</h4>
-            Docker, Git, LaTeX
-          </div>
-        </div>
-      </div>
-    </section>
+<!-- Skills -->
+<section id="skills" class="max-w-6xl mx-auto px-6 py-12 bg-white shadow-sm rounded-lg">
+  <h2 class="text-3xl font-bold text-teal-700 mb-6">Skills</h2>
+  <div class="flex flex-wrap gap-2">
+    <span class="px-3 py-1 bg-teal-100 text-teal-700 rounded-full text-sm">Python</span>
+    <span class="px-3 py-1 bg-teal-100 text-teal-700 rounded-full text-sm">PyTorch</span>
+    <span class="px-3 py-1 bg-teal-100 text-teal-700 rounded-full text-sm">TensorFlow</span>
+    <span class="px-3 py-1 bg-teal-100 text-teal-700 rounded-full text-sm">OpenCV</span>
+    <span class="px-3 py-1 bg-teal-100 text-teal-700 rounded-full text-sm">FSL</span>
+    <span class="px-3 py-1 bg-teal-100 text-teal-700 rounded-full text-sm">Diffusion Models</span>
+    <span class="px-3 py-1 bg-teal-100 text-teal-700 rounded-full text-sm">Transformers</span>
+  </div>
+</section>
 
-    <!-- Education -->
-    <section id="education" class="section scrollspy">
-      <h3 class="page-title white-text teal">Education</h3>
-      <div class="container">
-        <div class="card">
-          <div class="card-content">
-            <span class="card-title">Cairo University</span>
-            <p>B.Sc. in Systems and Biomedical Engineering (Expected 2026)</p>
-            <p>cGPA: 3.41</p>
-            <p>Relevant Courses: Medical Image Processing, Deep Learning, Computer Vision</p>
-          </div>
-        </div>
-      </div>
-    </section>
+<!-- Awards -->
+<section id="awards" class="max-w-6xl mx-auto px-6 py-12">
+  <h2 class="text-3xl font-bold text-teal-700 mb-6">Awards & Honors</h2>
+  <ul class="list-disc list-inside text-sm">
+    <li>1st Place – IEEE Egyptian Student Paper Contest 2024</li>
+    <li>1st Place – Nile University Undergraduate Research Forum 2024</li>
+    <li>4th Place – Machathon 5.00 Computer Vision Hackathon 2024</li>
+  </ul>
+</section>
 
-    <!-- Awards -->
-    <section id="awards" class="section scrollspy">
-      <h3 class="page-title white-text teal">Competitions & Awards</h3>
-      <div class="container">
-        <ul>
-          <li>1st Place – IEEE Egyptian Student Paper Contest 2024</li>
-          <li>1st Place – Nile University Undergraduate Research Forum 2024</li>
-          <li>4th Place – Machathon 5.00 CV Hackathon 2024</li>
-        </ul>
-      </div>
-    </section>
+<!-- Contact -->
+<section id="contact" class="bg-teal-700 text-white py-12">
+  <div class="max-w-6xl mx-auto px-6 text-center">
+    <h2 class="text-3xl font-bold mb-4">Contact</h2>
+    <p><i class="fa fa-phone"></i> +20-115-411-8192</p>
+    <p><i class="fa fa-envelope"></i> <a href="mailto:ahmed.mohammed031@eng-st.cu.edu.eg" class="underline">ahmed.mohammed031@eng-st.cu.edu.eg</a></p>
+    <p><i class="fa fa-github"></i> <a href="https://github.com/AhmedXAlDeeb" target="_blank" class="underline">GitHub</a></p>
+    <p><i class="fa fa-linkedin"></i> <a href="https://linkedin.com/in/ahmed-mohamed-aldeeb" target="_blank" class="underline">LinkedIn</a></p>
+  </div>
+</section>
 
-    <!-- Contact -->
-    <section id="contact" class="section scrollspy full-height">
-      <h3 class="page-title white-text teal">Contact</h3>
-      <div class="container">
-        <p><i class="fa fa-phone"></i> +20-115-411-8192</p>
-        <p><i class="fa fa-envelope"></i> <a href="mailto:ahmed.mohammed031@eng-st.cu.edu.eg">ahmed.mohammed031@eng-st.cu.edu.eg</a></p>
-        <p><i class="fa fa-github"></i> <a href="https://github.com/AhmedXAlDeeb" target="_blank">github.com/AhmedXAlDeeb</a></p>
-        <p><i class="fa fa-linkedin"></i> <a href="https://linkedin.com/in/ahmed-mohamed-aldeeb" target="_blank">linkedin.com/in/ahmed-mohamed-aldeeb</a></p>
-      </div>
-    </section>
-  </main>
-
-  <!-- Typed.js -->
-  <script src="assets/vendor/typed.js/typed.min.js"></script>
-  <script>
-    var typed = new Typed('.typing', {
-      strings: ["Biomedical AI", "fMRI Analysis", "Computer Vision", "Medical Image Processing"],
-      loop: true,
-      typeSpeed: 80,
-      backSpeed: 40
-    });
-  </script>
-
-  <!-- jQuery + Materialize -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.95.3/js/materialize.min.js"></script>
-  <script>
-    $(document).ready(function () {
-      $(".scrollspy").scrollSpy();
-      $(".button-collapse").sideNav({ menuWidth: 190, edge: "left", closeOnClick: true });
-    });
-  </script>
 </body>
 </html>
