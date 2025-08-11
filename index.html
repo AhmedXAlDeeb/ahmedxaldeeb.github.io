@@ -56,52 +56,150 @@
 </section>
 
 <!-- Education -->
-<section id="education" class="max-w-6xl mx-auto px-6 py-12 bg-white shadow-sm rounded-lg">
-  <h2 class="text-3xl font-bold text-teal-700 mb-4">Education</h2>
-  <div>
-    <h3 class="text-xl font-semibold">B.Sc. in Systems and Biomedical Engineering</h3>
-    <p class="text-gray-600">Cairo University — Expected 2026</p>
-    <p>cGPA: 3.41</p>
-    <p class="mt-2 text-sm"><b>Relevant Coursework:</b> Medical Image Processing, Deep Learning, Computer Vision, Digital Signal Processing</p>
+<section id="education" class="max-w-6xl mx-auto px-6 py-12 bg-gray-50">
+  <h2 class="text-3xl font-bold text-teal-700 mb-8">Education</h2>
+  
+  <div class="md:flex md:items-center md:gap-8">
+    
+    <!-- University Logo -->
+    <div class="flex-shrink-0 mb-6 md:mb-0">
+      <img src="https://upload.wikimedia.org/wikipedia/en/4/4a/Cairo_University_Crest.png" 
+           alt="Cairo University Logo"
+           class="w-32 h-32 object-contain">
+    </div>
+
+    <!-- Education Details -->
+    <div>
+      <h3 class="text-2xl font-semibold text-gray-900">B.Sc. in Systems & Biomedical Engineering</h3>
+      <p class="text-gray-600">Cairo University, Egypt &nbsp;|&nbsp; <span class="font-medium">Expected 2026</span></p>
+      <p class="text-gray-600 mb-4">Current GPA: <strong>3.41 / 4.00</strong></p>
+
+      <p class="mb-2">
+        The program integrates engineering principles with medical sciences, emphasizing the development of computational and experimental methods for healthcare technologies. 
+        My studies have given me a solid foundation in biomedical instrumentation, signal & image processing, machine learning, and AI applications in medicine.
+      </p>
+
+      <!-- Relevant Courses -->
+      <div>
+        <h4 class="font-semibold text-gray-800 mb-1">Relevant Coursework:</h4>
+        <ul class="list-disc list-inside text-gray-700">
+          <li>Medical Image Processing</li>
+          <li>Digital Signal Processing</li>
+          <li>Machine Learning & Deep Learning</li>
+          <li>Biomedical Instrumentation</li>
+          <li>Computer Vision</li>
+        </ul>
+      </div>
+    </div>
   </div>
 </section>
+
 
 <!-- Research & Publications -->
 <section id="research" class="max-w-6xl mx-auto px-6 py-12">
   <h2 class="text-3xl font-bold text-teal-700 mb-6">Research & Publications</h2>
-  <div class="space-y-6">
+  
+  <div class="space-y-8">
+
+    <!-- Publication 1 -->
     <div>
-      <h3 class="font-semibold text-lg">Real-Time Student Drowsiness Detection Using CNN and Spatial Transformers</h3>
-      <p class="text-sm text-gray-600">Preprint | Developed a ResNet-18 + spatial transformer model achieving 95% accuracy for online learning engagement monitoring.</p>
+      <h3 class="font-semibold text-lg">
+        Real-Time Student Drowsiness Detection Using CNN and Spatial Transformers in Online Learning
+      </h3>
+      <p class="text-sm text-gray-600 italic">
+        <strong>Ahmed Soliman</strong>, Mostafa Ali, Shahd Ahmed, Nouran Hani, Mohammed Hisham, Meram Mahmoud
+      </p>
+      <p class="text-sm text-gray-600">
+        Preprint, 2024 — Developed a <strong>ResNet-18</strong> + <strong>spatial transformer</strong> model achieving <strong>95% accuracy</strong> in detecting drowsiness during online learning sessions. 
+        Integrated pose estimation and engagement metrics for real-time feedback.
+      </p>
+      <a href="#" target="_blank" class="text-teal-600 hover:underline">[View Preprint]</a>
     </div>
+
+    <!-- Publication 2 -->
     <div>
-      <h3 class="font-semibold text-lg">Detecting Student Disengagement in Online Classes: A Review</h3>
-      <p class="text-sm text-gray-600">Systematic review of 38 studies highlighting deep learning models for real-time engagement monitoring.</p>
+      <h3 class="font-semibold text-lg">
+        Detecting Student Disengagement in Online Classes Using Deep Learning: A Review
+      </h3>
+      <p class="text-sm text-gray-600 italic">
+        <strong>Ahmed Soliman</strong>, Mostafa Ali, Shahd Ahmed, Nouran Hani, Mohammed Hisham, Meram Mahmoud
+      </p>
+      <p class="text-sm text-gray-600">
+        Review Paper, Sep 2023 – Nov 2024 — Conducted a systematic review of <strong>38 studies</strong> 
+        highlighting key indicators, detection techniques, and deep learning models for real-time engagement monitoring in virtual classrooms.
+      </p>
+      <a href="#" target="_blank" class="text-teal-600 hover:underline">[View Review]</a>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- Projects -->
+<section id="projects" class="max-w-6xl mx-auto px-6 py-12 bg-white shadow-sm rounded-lg">
+  <h2 class="text-3xl font-bold text-teal-700 mb-8">Selected Projects</h2>
+
+  <!-- Research Projects -->
+  <h3 class="text-xl font-semibold text-gray-800 mb-4">Research Projects</h3>
+  <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+    <div class="border rounded-lg p-4 shadow hover:shadow-md transition">
+      <h4 class="font-semibold mb-2">Cognitive Stability fMRI Analysis</h4>
+      <p class="text-sm mb-2">Applied FSL GLM pipeline on Flanker task dataset for multi-level group analysis and ROI extraction.</p>
+      <a href="https://drive.google.com/file/d/1sOkPCtCOFXop4OAl3YEE0gb_uEfSFfhy/view?usp=sharing" target="_blank" class="text-teal-600 text-sm">View</a>
+    </div>
+    <div class="border rounded-lg p-4 shadow hover:shadow-md transition">
+      <h4 class="font-semibold mb-2">Multimodal PCG-ECG Stress Detection</h4>
+      <p class="text-sm mb-2">Developed stress classification pipeline using PCG & ECG achieving 80% accuracy with Random Forest.</p>
+      <a href="https://github.com/AhmedXAlDeeb/Cardiovascular_Multimodal_Learning-" target="_blank" class="text-teal-600 text-sm">Code</a>
+    </div>
+    <div class="border rounded-lg p-4 shadow hover:shadow-md transition">
+      <h4 class="font-semibold mb-2">EEG-Based BCI for Motor Imagery & SSVEP</h4>
+      <p class="text-sm mb-2">Built classical ML pipeline using PSD, CCA, Hjorth features for multi-class EEG brain-computer interface.</p>
+      <a href="https://github.com/AhmedXAlDeeb/ICMTC-BCI-Challenge" target="_blank" class="text-teal-600 text-sm">Code</a>
+    </div>
+  </div>
+
+  <!-- Applied AI & Computer Vision -->
+  <h3 class="text-xl font-semibold text-gray-800 mb-4">Applied AI & Computer Vision</h3>
+  <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+    <div class="border rounded-lg p-4 shadow hover:shadow-md transition">
+      <h4 class="font-semibold mb-2">AI-Generated Image Detection</h4>
+      <p class="text-sm mb-2">Detection of synthetic images from Diffusion, GAN, and CNN using high-frequency artifact fingerprints.</p>
+      <a href="https://github.com/mistaluai/DeepSee" target="_blank" class="text-teal-600 text-sm">Code</a>
+    </div>
+    <div class="border rounded-lg p-4 shadow hover:shadow-md transition">
+      <h4 class="font-semibold mb-2">Video Anomaly Detection – Shoplifting</h4>
+      <p class="text-sm mb-2">YOLOv8 + ConvLSTM pipeline for retail surveillance achieving 78% F1-score on CCTV data.</p>
+      <a href="https://github.com/AhmedXAlDeeb/Shoplifting-Detection" target="_blank" class="text-teal-600 text-sm">Code</a>
+    </div>
+    <div class="border rounded-lg p-4 shadow hover:shadow-md transition">
+      <h4 class="font-semibold mb-2">Real-Time Student Drowsiness Detection</h4>
+      <p class="text-sm mb-2">ResNet-18 + spatial transformers with pose estimation for online learning monitoring at 95% accuracy.</p>
+      <a href="https://github.com/AhmedXAlDeeb/Hocus_Focus" target="_blank" class="text-teal-600 text-sm">Code</a>
+    </div>
+  </div>
+
+  <!-- Open-Source & Tools -->
+  <h3 class="text-xl font-semibold text-gray-800 mb-4">Open-Source & Tools</h3>
+  <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="border rounded-lg p-4 shadow hover:shadow-md transition">
+      <h4 class="font-semibold mb-2">LucidumLab: Classical Computer Vision Tools</h4>
+      <p class="text-sm mb-2">PyQt-based desktop app with filtering, segmentation, edge detection, and feature matching algorithms.</p>
+      <a href="https://github.com/orgs/LucidumLab/dashboard" target="_blank" class="text-teal-600 text-sm">Code</a>
+    </div>
+    <div class="border rounded-lg p-4 shadow hover:shadow-md transition">
+      <h4 class="font-semibold mb-2">Spectrum Code: Biomedical Signal & Image Toolkit</h4>
+      <p class="text-sm mb-2">Python suite for real-time filter design, biosignal visualization, and reconstruction simulations.</p>
+      <a href="https://github.com/Sprectrum-code" target="_blank" class="text-teal-600 text-sm">Code</a>
+    </div>
+    <div class="border rounded-lg p-4 shadow hover:shadow-md transition">
+      <h4 class="font-semibold mb-2">Seshat-Agent: Multi-Agent Meeting Assistant</h4>
+      <p class="text-sm mb-2">Automates meeting transcription, summarization, and documentation with Whisper + Gemini + Notion API.</p>
+      <a href="https://github.com/AhmedXAlDeeb/Seshat-Agent" target="_blank" class="text-teal-600 text-sm">Code</a>
     </div>
   </div>
 </section>
 
-<!-- Projects -->
-<section id="projects" class="max-w-6xl mx-auto px-6 py-12 bg-white shadow-sm rounded-lg">
-  <h2 class="text-3xl font-bold text-teal-700 mb-6">Selected Projects</h2>
-  <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-    <div class="border rounded-lg p-4">
-      <h3 class="font-semibold">Cognitive Stability fMRI Analysis</h3>
-      <p class="text-sm">Applied FSL GLM pipeline on Flanker task dataset for multi-level group analysis and ROI extraction.</p>
-      <a href="https://drive.google.com/file/d/1sOkPCtCOFXop4OAl3YEE0gb_uEfSFfhy/view?usp=sharing" target="_blank" class="text-teal-600 text-sm">View</a>
-    </div>
-    <div class="border rounded-lg p-4">
-      <h3 class="font-semibold">Multimodal PCG-ECG Stress Detection</h3>
-      <p class="text-sm">Developed stress classification pipeline using PCG & ECG achieving 80% accuracy with Random Forest.</p>
-      <a href="https://github.com/AhmedXAlDeeb/Cardiovascular_Multimodal_Learning-" target="_blank" class="text-teal-600 text-sm">Code</a>
-    </div>
-    <div class="border rounded-lg p-4">
-      <h3 class="font-semibold">AI-Generated Image Detection via Fingerprint Extraction</h3>
-      <p class="text-sm">Detection of synthetic images from Diffusion, GAN, and CNN using high-frequency artifact analysis.</p>
-      <a href="https://github.com/mistaluai/DeepSee" target="_blank" class="text-teal-600 text-sm">Code</a>
-    </div>
-  </div>
-</section>
 
 <!-- Experience -->
 <section id="experience" class="max-w-6xl mx-auto px-6 py-12">
