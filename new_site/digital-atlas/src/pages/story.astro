@@ -1,0 +1,53 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import Timeline from '../components/Timeline.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { site } from '../data/site';
+import { url } from '../lib/url';
+
+const booking = site.bookingUrl || url('/contact/');
+const timeline = [
+  { period: 'Graduated', title: 'B.Sc. Systems & Biomedical Engineering', org: 'Cairo University, Egypt — cGPA 3.41/4.00', logo: '/img/companies/cairo university.jpeg', logoAlt: 'Cairo University logo', details: ['Medical image processing, DSP, ML/DL, computer vision'] },
+  { period: 'Present', title: 'AI Engineer', details: ['Building and researching AI systems'] },
+  { period: 'Feb 2024 – Present', title: 'Computer Vision Research Assistant', org: 'Nile University – Center for Informatics Science', logo: '/img/companies/NU.jpg', logoAlt: 'Nile University logo', details: ['Papilledema early detection from fundus images with clinicians'] },
+  { period: '2024 – 2025', title: 'Data & AI internships', org: 'Synapse Analytics · IBM Egypt · innovay.io · IDH', details: ['Production ML pipelines, NLP, data engineering, analytics at scale'] },
+  { period: '2024', title: 'Research recognition', org: 'IEEE · Nile University · Machathon', details: ['1st place IEEE Egyptian Student Paper Contest; 1st place NU research forum; 4th place Machathon vision hackathon'] },
+  { period: 'Before graduation', title: 'MSc offers in hand', details: ['Applied to dozens of opportunities over two years of studying the process'] },
+  { period: 'Now', title: 'Mentoring, one to one', org: '10 seats a month', details: ['Helping friends and peers find opportunities, raise scores, and complete applications'] },
+];
+---
+<BaseLayout title="My Story — Ahmed Soliman" description="Funded study isn't luck. Ahmed learned the process, and now he teaches it — from Cairo University to AI engineering to MSc offers.">
+<div class="container page">
+  <SectionHeading eyebrow="Story" title="Funded study isn't luck. I learned the process, and now I teach it." level={1} />
+  <img class="headshot" src="/img/companies/IEEE_Presentation_ver.jpg" alt="Ahmed Soliman presenting" width="560" decoding="async" />
+  <div class="reading">
+    <h2>Where I started</h2>
+    <p>I'm Ahmed Soliman. I studied engineering at Cairo University, got pulled toward the place where machines meet the human body, and used AI to connect them. Today I work as an AI engineer. Like many engineering students in Egypt, I first saw funded study abroad as something that happened to other people: a rumor of professors, scholarships and offers, with no map.</p>
+  </div>
+
+  <div class="reading">
+    <h2>The turning point</h2>
+    <p>At some point I stopped asking, "Will I get in?" and started asking, "What actually decides it?" That question changed everything. I treated it like an engineering problem: gather information, test assumptions, iterate. For about two years I studied how admission and funding really work: how supervisors choose students, what a statement of purpose has to do, where English tests fit, and which opportunities are genuinely funded and which only look that way.</p>
+  </div>
+
+  
+
+  <div class="reading">
+    <h2>Why I mentor</h2>
+    <p>My friends noticed. One by one they asked me to look at their IELTS plans, help them find supervisors, and read their applications. I helped many of them find suitable opportunities, raise their scores, and send applications they were proud of. That's when I understood this is teachable. Talent is rarely the difference. Information, structure and honest feedback usually are. I love helping people, and I want to do it for more students, carefully. That's why I take ten a month, one to one: mentoring only works when it's personal.</p>
+  </div>
+
+  <div class="reading">
+    <h2>What I promise</h2>
+    <p>I can't promise admission or funding. Those decisions belong to universities and funding bodies. I promise a clear plan, honest feedback, and my full attention.</p>
+  </div>
+
+  <CtaBand title="Walk this path with a guide." summary="A free 20-minute call: your profile, your goals, and an honest opinion on fit." primaryHref={booking} primaryLabel="Book a free intro call" secondaryHref="/mentorship/" secondaryLabel="See the mentorship" />
+</div>
+<script type="application/ld+json" set:html={JSON.stringify({'@context':'https://schema.org','@type':'Person',name:'Ahmed Soliman',email:`mailto:${site.email}`,affiliation:'Cairo University',sameAs:[site.profiles.github,site.profiles.linkedin]})} />
+</BaseLayout>
+<style>
+  .page { padding-block: 3rem; display: grid; gap: 1rem; }
+  .headshot { border-radius: var(--radius-lg); border: var(--glass-border); width: 100%; max-width: 560px; height: auto; }
+</style>

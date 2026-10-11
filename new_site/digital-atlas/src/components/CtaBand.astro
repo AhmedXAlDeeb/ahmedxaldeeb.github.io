@@ -1,0 +1,21 @@
+---
+import { url } from '../lib/url';
+interface Props { title: string; summary?: string; primaryHref?: string; primaryLabel?: string; secondaryHref?: string; secondaryLabel?: string; invert?: boolean; id?: string; }
+const p = Astro.props as Props;
+function href(h: string) { return h.startsWith('http') || h.startsWith('mailto:') ? h : url(h); }
+---
+<section class:list={['cta', 'card-simple', 'reveal', { 'section--invert': p.invert }]} id={p.id}>
+  <div>
+    <h2>{p.title}</h2>
+    {p.summary && <p class="muted">{p.summary}</p>}
+  </div>
+  <div class="actions">
+    {p.primaryHref && <a class="button-primary" href={href(p.primaryHref)}>{p.primaryLabel ?? 'Get started'}</a>}
+    {p.secondaryHref && <a class="button-secondary" href={href(p.secondaryHref)}>{p.secondaryLabel ?? 'Learn more'}</a>}
+  </div>
+</section>
+<style>
+  .cta { display: flex; flex-wrap: wrap; gap: 1.5rem; align-items: center; justify-content: space-between; margin-block: var(--space-16); }
+  h2 { margin: 0 0 0.4rem; font-size: var(--text-2xl); } .muted { color: var(--color-text-muted); margin: 0; }
+  .actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+</style>

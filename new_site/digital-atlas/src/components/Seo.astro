@@ -1,0 +1,39 @@
+---
+import { site } from '../data/site';
+import { url } from '../lib/url';
+
+interface Props {
+  title?: string;
+  description?: string;
+  canonical?: string;
+  ogImage?: string;
+  noindex?: boolean;
+  type?: 'website' | 'article';
+}
+const {
+  title = site.title,
+  description = site.description,
+  canonical,
+  ogImage = '/og-default.svg',
+  noindex = false,
+  type = 'website',
+} = Astro.props as Props;
+const canonicalUrl = canonical ?? new URL(Astro.url.pathname, site.siteUrl).toString();
+---
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonicalUrl} />
+{noindex && <meta name="robots" content="noindex, nofollow" />}
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:type" content={type} />
+<meta property="og:url" content={canonicalUrl} />
+<meta property="og:image" content={new URL(ogImage, site.siteUrl).toString()} />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={new URL(ogImage, site.siteUrl).toString()} />
+<meta name="theme-color" content="#0A0A0A" />
+<link rel="icon" type="image/svg+xml" href={url('/favicon.svg')} />
+<link rel="manifest" href={url('/site.webmanifest')} />
+<link rel="sitemap" href={url('/sitemap-index.xml')} />

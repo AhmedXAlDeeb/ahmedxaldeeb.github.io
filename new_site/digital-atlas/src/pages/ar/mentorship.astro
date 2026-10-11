@@ -1,0 +1,220 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
+import Faq from '../../components/Faq.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import Icon from '../../components/Icon.astro';
+import Roadmap from '../../components/Roadmap.astro';
+import CompareTable from '../../components/CompareTable.astro';
+import { site } from '../../data/site';
+import { url } from '../../lib/url';
+import { roadmap, pains, program, weeklyLoop, comparison, facts, policies, faqsAr, pricing } from '../../data/mentorship';
+
+const booking = site.bookingUrl || url('/ar/contact/');
+const stageRef = (id: string) => {
+  const i = roadmap.findIndex((n) => n.id === id);
+  return { no: i + 1, title: roadmap[i]?.titleAr ?? '' };
+};
+const chips = [
+  { href: '#path', label: 'الطريق' },
+  { href: '#how', label: 'كيف يعمل' },
+  { href: '#why-one-to-one', label: 'لماذا فردي' },
+  { href: '#pricing', label: 'الأسعار' },
+  { href: '#faq', label: 'الأسئلة' },
+];
+---
+<BaseLayout title="الإرشاد — ماجستير ودكتوراه ممولة في كندا" description="لقاء فردي أسبوعي، وخطة مكتوبة بتواريخ حقيقية، وملاحظات صادقة على كل ما تكتبه، من اختبار اللغة إلى المشرف والتقديم وتصريح الدراسة." lang="ar">
+<div class="container page">
+
+  <SectionHeading eyebrow="الإرشاد" title="طريقك إلى درجة عليا ممولة بالكامل في كندا، مبني حولك أنت." lede="إرشاد فردي لطلاب الحاسبات والهندسة، من اختبار اللغة إلى المشرف والتقديم وتصريح الدراسة." level={1} />
+  <ul class="fact-strip reveal">
+    {facts.map((f) => <li><Icon name={f.icon} size={18} /> {f.ar}</li>)}
+  </ul>
+  <div class="cta-row reveal">
+    <a class="button-primary" href={booking}>احجز مكالمة تعريفية مجانية</a>
+    <a class="button-secondary" href="#pricing">الأسعار</a>
+  </div>
+  <nav class="chips" aria-label="في هذه الصفحة">
+    {chips.map((c) => <a href={c.href}>{c.label}</a>)}
+  </nav>
+
+  <section aria-labelledby="problem" data-hero-section>
+    <span id="problem" hidden>problem</span>
+    <SectionHeading eyebrow="المشكلة" title="اللعبة تكافئ المستعد" />
+    <p class="reading reveal">الدراسة العليا الممولة تكافئ من يعرف قواعد اللعبة وتعاقب من يخمّن.</p>
+    <div class="card-grid">
+      {pains.map((p) => (
+        <article class="card-simple reveal">
+          <h3>{p.titleAr}</h3>
+          <p>{p.textAr}</p>
+          <a class="fix-chip" href={`#stage-${p.fixStage}`} aria-label={`يُحل في المرحلة ${stageRef(p.fixStage).no}: ${stageRef(p.fixStage).title}`}>يُحل في المرحلة {stageRef(p.fixStage).no} ←</a>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section aria-labelledby="path" id="path">
+    <span id="path" hidden>path</span>
+    <div class="section--invert block">
+      <SectionHeading eyebrow="الطريق" title="ست مراحل بالترتيب" />
+      <Roadmap nodes={roadmap} lang="ar" outputLabel="المخرَج" />
+    </div>
+  </section>
+
+  <section aria-labelledby="how" id="how">
+    <span id="how" hidden>how</span>
+    <SectionHeading eyebrow="كيف يعمل" title="جدول زمني وحلقة أسبوعية" />
+    <ol class="mini-timeline reveal">
+      {program.map((s, i) => <li><span class="t-no">{i + 1}</span> {s.ar}</li>)}
+    </ol>
+    <ol class="loop reveal">
+      {weeklyLoop.map((w) => <li><strong>{w.ar}</strong><span>{w.metaAr}</span></li>)}
+    </ol>
+    <p class="muted">بالإضافة إلى قوالب وقوائم تحقق وجدول متابعة.</p>
+  </section>
+
+  <section aria-labelledby="why11" id="why-one-to-one">
+    <span id="why11" hidden>why one to one</span>
+    <div class="section--invert block">
+      <SectionHeading eyebrow="لماذا فردي" title="لماذا فردي وليس جماعيًا؟" lede="لأنه لا يوجد شيء اسمه طلب تقديم عام." />
+      <CompareTable
+        caption="مقارنة بين الإرشاد الفردي والجلسة الجماعية."
+        headMatter="المحور" headOne="فردي" headGroup="جماعي"
+        rows={comparison.map((r) => ({ key: r.keyAr, one: r.oneAr, group: r.groupAr }))}
+      />
+      <p class="muted">المعرفة العامة، أي كيف تعمل العملية، أشاركها مجانًا في المقالات والجلسات. أما استراتيجيتك الشخصية فهي ما يخصصه اللقاء الفردي.</p>
+    </div>
+  </section>
+
+  <section aria-labelledby="pricing" id="pricing">
+    <span id="pricing" hidden>pricing</span>
+    <SectionHeading eyebrow="الأسعار" title="سعر واحد بسيط. شهرًا بشهر." />
+    <div class="card-grid prices">
+      {pricing.map((t) => (
+        <article class="card-simple price-card reveal">
+          <h3>{t.nameAr}</h3>
+          <p class="price">{t.amount} {t.currency}<span> / {t.perAr}</span></p>
+        </article>
+      ))}
+    </div>
+    <p class="muted reveal">كل ما سبق مشمول في الباقتين. دون عقد طويل: معظم الطلاب يفهمون العملية خلال شهر تقريبًا، ثم يقررون الاستمرار.</p>
+    <ul class="policy-row">
+      {policies.map((p) => <li class="reveal"><Icon name={p.icon} size={18} /> {p.ar}</li>)}
+    </ul>
+    <p><a class="button-primary" href={booking}>احجز مكالمة تعريفية مجانية</a></p>
+  </section>
+
+  <section aria-labelledby="mentor" id="mentor">
+    <span id="mentor" hidden>mentor</span>
+    <div class="section--invert block mentor-grid">
+      <div>
+        <SectionHeading eyebrow="مرشدك" title="كنت على الجانب الآخر من هذه الطاولة." />
+        <p>درست هذا الطريق عامين، وقدّمت على عشرات الفرص، وحصلت على عروض ماجستير قبل التخرج، وساعدت أصدقائي في ذلك.</p>
+        <ul class="cred-chips">
+          <li>خريج جامعة القاهرة</li>
+          <li>مهندس ذكاء اصطناعي</li>
+          <li>عروض ماجستير قبل التخرج</li>
+          <li>عشرات الطلبات</li>
+        </ul>
+        <p><a href={url('/ar/story/')}>اقرأ قصتي ومؤهلاتي ←</a></p>
+        <p class="muted">لا شهادات بعد، ولن أختلق واحدة. سترى أسلوبي في المكالمة المجانية.</p>
+      </div>
+      <div class="will-card">
+        <h3>ما الذي سأفعله — وما لن أفعله</h3>
+        <div class="will-cols">
+          <div>
+            <p class="will-head"><Icon name="check" size={16} /> سأفعل</p>
+            <ul>
+              <li>إبقاؤك على جدول واقعي</li>
+              <li>مراجعة كل ما تكتبه بتفصيل</li>
+              <li>إخبارك بصراحة عندما يكون العمل غير قوي</li>
+              <li>توجيهك للمصادر الرسمية</li>
+            </ul>
+          </div>
+          <div>
+            <p class="will-head"><Icon name="cross" size={16} /> لن أفعل</p>
+            <ul>
+              <li>ضمان القبول أو التمويل أو التأشيرة</li>
+              <li>كتابة مستنداتك عنك</li>
+              <li>استشارة قانونية في الهجرة</li>
+            </ul>
+          </div>
+        </div>
+        <p class="muted">ومن يعد بذلك يبيع شيئًا آخر.</p>
+      </div>
+    </div>
+  </section>
+
+  <Faq id="faq" items={faqsAr} heading="أسئلة نجيب عنها بصدق" />
+
+  <CtaBand id="final-cta" invert title="ابدأ بمكالمة مجانية ٢٠ دقيقة." summary="ملفك وأهدافك ورأيي الصريح في هل أستطيع مساعدتك، وكيف." primaryHref={booking} primaryLabel="احجز مكالمة تعريفية مجانية" secondaryHref="/ar/contact/" secondaryLabel="بيانات التواصل" />
+</div>
+<div class="sticky-cta" data-sticky-cta>
+  <a class="button-primary" href={booking}>احجز مكالمة تعريفية مجانية</a>
+</div>
+<script>
+  const bar = document.querySelector('[data-sticky-cta]');
+  const hero = document.querySelector('[data-hero-section]');
+  const final = document.getElementById('final-cta');
+  const footer = document.querySelector('.site-footer');
+  let heroOut = false, endIn = false;
+  function render() {
+    bar?.classList.toggle('show', heroOut && !endIn);
+  }
+  const io = new IntersectionObserver((entries) => {
+    for (const e of entries) {
+      if (e.target === hero) heroOut = !e.isIntersecting;
+      else endIn = e.isIntersecting;
+    }
+    render();
+  }, { threshold: 0.05 });
+  if (hero) io.observe(hero);
+  if (final) io.observe(final);
+  if (footer) io.observe(footer);
+</script>
+</BaseLayout>
+<style>
+  .page { padding-block: 3rem; display: grid; gap: 0.5rem; }
+  section { scroll-margin-top: calc(var(--header-height) + 1rem); }
+  .cta-row { display: flex; gap: 0.8rem; flex-wrap: wrap; }
+  .fact-strip { list-style: none; margin: 1.2rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.6rem; }
+  .fact-strip li { display: inline-flex; align-items: center; gap: 0.5rem; border: 1px solid var(--color-border-strong); border-radius: var(--radius-pill); padding: 0.45rem 0.95rem; font-size: var(--text-sm); font-weight: 600; }
+  .chips { display: flex; gap: 0.5rem; flex-wrap: wrap; margin: 1.2rem 0 0; }
+  .chips a { border: 1px solid var(--color-border); border-radius: var(--radius-pill); padding: 0.35rem 0.9rem; font-size: var(--text-sm); text-decoration: none; color: var(--color-text); }
+  .card-grid article h3 { margin: 0 0 0.3rem; }
+  .card-grid article p { margin: 0; color: var(--color-text-muted); font-size: var(--text-sm); }
+  .fix-chip { display: inline-block; margin-top: 0.7rem; font-size: var(--text-sm); font-weight: 600; border: 1px solid var(--color-border-strong); border-radius: var(--radius-pill); padding: 0.25rem 0.75rem; text-decoration: none; }
+  .mini-timeline { list-style: none; margin: 0 0 1.5rem; padding: 0; display: grid; gap: 0.6rem; }
+  .mini-timeline li { display: flex; gap: 0.7rem; align-items: center; }
+  .t-no { flex-shrink: 0; width: 2rem; height: 2rem; border: 1px solid var(--color-border-strong); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .loop { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.6rem; grid-template-columns: repeat(3, 1fr); }
+  .loop li { border: 1px solid var(--color-border); border-radius: var(--radius-lg); background: var(--color-bg-elevated); padding: 1rem; display: grid; gap: 0.2rem; position: relative; }
+  .loop li:not(:last-child)::after { content: "→"; position: absolute; inset-inline-end: -1.1rem; top: 50%; transform: translateY(-50%); font-weight: 700; }
+  .loop strong { display: block; }
+  .loop span { color: var(--color-text-muted); font-size: var(--text-sm); }
+  :global([dir="rtl"]) .loop li:not(:last-child)::after { content: "←"; }
+  .prices { grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); }
+  .price-card h3 { margin: 0; font-size: var(--text-lg); }
+  .price { font-size: clamp(2.6rem, 7vw, 3.8rem); font-weight: 700; margin: 0.2rem 0 0; line-height: 1; font-variant-numeric: tabular-nums; }
+  .price span { font-size: var(--text-base); color: var(--color-text-muted); font-weight: 400; }
+  .policy-row { list-style: none; margin: 1.2rem 0 0; padding: 0; display: grid; gap: 0.6rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); }
+  .policy-row li { display: flex; gap: 0.55rem; align-items: flex-start; font-size: var(--text-sm); }
+  .mentor-grid { display: grid; gap: 2rem; }
+  @media (min-width: 52rem) { .mentor-grid { grid-template-columns: 1.1fr 1fr; } }
+  .cred-chips { list-style: none; margin: 1rem 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .cred-chips li { border: 1px solid var(--color-border-strong); border-radius: var(--radius-pill); padding: 0.25rem 0.8rem; font-size: var(--text-sm); }
+  .will-card { border: 1px solid var(--color-border-strong); border-radius: var(--radius-lg); padding: 1.25rem 1.4rem; }
+  .will-card h3 { margin: 0 0 0.8rem; }
+  .will-cols { display: grid; gap: 1rem; grid-template-columns: 1fr 1fr; }
+  .will-head { display: flex; gap: 0.45rem; align-items: center; font-weight: 700; margin: 0 0 0.4rem; }
+  .will-cols ul { margin: 0; padding-inline-start: 1.1rem; display: grid; gap: 0.35rem; font-size: var(--text-sm); color: var(--color-text-muted); }
+  .muted { color: var(--color-text-muted); font-size: var(--text-sm); }
+  .sticky-cta { display: none; }
+  @media (max-width: 48rem) {
+    .sticky-cta { position: fixed; bottom: 0; inset-inline: 0; z-index: 30; padding: 0.6rem var(--page-gutter) calc(0.6rem + env(safe-area-inset-bottom)); background: var(--color-bg-glass-strong); backdrop-filter: blur(var(--glass-blur)); -webkit-backdrop-filter: blur(var(--glass-blur)); border-top: 1px solid var(--color-divider); }
+    .sticky-cta.show { display: block; }
+    .sticky-cta .button-primary { width: 100%; }
+    .loop { grid-template-columns: 1fr; }
+    .loop li:not(:last-child)::after { content: "↓"; inset-inline-end: auto; top: auto; bottom: -1.35rem; left: 0; right: 0; text-align: center; transform: none; }
+  }
+</style>

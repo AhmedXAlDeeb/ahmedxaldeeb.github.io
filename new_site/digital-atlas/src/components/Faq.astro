@@ -1,0 +1,23 @@
+---
+interface Item { q: string; a: string }
+interface Props { items: Item[]; heading?: string; id?: string }
+const { items, heading = 'Questions, answered honestly', id } = Astro.props as Props;
+---
+<section aria-label={heading} id={id}>
+  <h2>{heading}</h2>
+  <div class="faq">
+    {items.map((it) => (
+      <details class="card-simple">
+        <summary>{it.q}</summary>
+        <p>{it.a}</p>
+      </details>
+    ))}
+  </div>
+</section>
+<style>
+  .faq { display: grid; gap: 0.75rem; }
+  details { padding: 1rem 1.25rem; }
+  summary { cursor: pointer; font-weight: 600; min-height: 44px; }
+  summary::marker { color: var(--color-accent); }
+  p { color: var(--color-text-muted); margin: 0.5rem 0 0; }
+</style>

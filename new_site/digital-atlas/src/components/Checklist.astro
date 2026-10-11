@@ -1,0 +1,30 @@
+---
+interface Props { title: string; items: string[] }
+const { title, items } = Astro.props as Props;
+---
+<fieldset class="card-simple checklist">
+  <legend>{title}</legend>
+  {items.map((it) => (
+    <label><input type="checkbox" /> <span>{it}</span></label>
+  ))}
+</fieldset>
+<script>
+  document.querySelectorAll('.checklist').forEach((box) => {
+    const key = 'checklist:' + (box.querySelector('legend')?.textContent ?? '');
+    const inputs = Array.from(box.querySelectorAll('input'));
+    try {
+      const saved: string[] = JSON.parse(localStorage.getItem(key) ?? '[]');
+      inputs.forEach((el, i) => { (el as HTMLInputElement).checked = saved.includes(String(i)); });
+    } catch {}
+    box.addEventListener('change', () => {
+      const done = inputs.map((el, i) => ((el as HTMLInputElement).checked ? String(i) : '')).filter(Boolean);
+      try { localStorage.setItem(key, JSON.stringify(done)); } catch {}
+    });
+  });
+</script>
+<style>
+  .checklist { display: grid; gap: 0.5rem; border: 1px solid var(--color-border); }
+  legend { font-weight: 700; padding: 0 0.5rem; }
+  label { display: flex; gap: 0.6rem; align-items: flex-start; cursor: pointer; min-height: 44px; }
+  input { width: 1.2rem; height: 1.2rem; accent-color: var(--color-accent); margin-top: 0.25rem; flex-shrink: 0; }
+</style>

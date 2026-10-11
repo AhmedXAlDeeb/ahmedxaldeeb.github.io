@@ -1,0 +1,41 @@
+---
+import '../styles/tokens.css';
+import '../styles/global.css';
+import Seo from '../components/Seo.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import HorizonStrip from '../components/HorizonStrip.astro';
+import { getLangFromUrl, type Lang } from '../i18n/ui';
+
+interface Props {
+  title?: string; description?: string; noindex?: boolean; ogImage?: string;
+  type?: 'website' | 'article'; strip?: boolean; lang?: Lang;
+}
+const { title, description, noindex, ogImage, type, strip = true, lang } = Astro.props as Props;
+const pageLang: Lang = lang ?? getLangFromUrl(Astro.url.pathname);
+const dir = pageLang === 'ar' ? 'rtl' : 'ltr';
+const isHome = Astro.url.pathname === '/' || Astro.url.pathname === '' || Astro.url.pathname === '/ar' || Astro.url.pathname === '/ar/';
+---
+<!doctype html>
+<html lang={pageLang} dir={dir}>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<Seo title={title} description={description} noindex={noindex} ogImage={ogImage} type={type} />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.19.0/dist/katex.min.css" />
+<slot name="head" />
+</head>
+<body>
+<a class="skip-link" href="#main">{pageLang === 'ar' ? 'تخطَّ إلى المحتوى' : 'Skip to main content'}</a>
+<Header lang={pageLang} />
+{strip && !isHome && <HorizonStrip />}
+<main id="main"><slot /></main>
+<Footer lang={pageLang} />
+<script>
+  const io = new IntersectionObserver((entries) => {
+    for (const e of entries) if (e.isIntersecting) { e.target.classList.add('is-visible'); io.unobserve(e.target); }
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+</script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import ContactForm from '../components/ContactForm.astro';
+import { site } from '../data/site';
+import { url } from '../lib/url';
+
+const booking = site.bookingUrl;
+---
+<BaseLayout title="Contact — Ahmed Soliman" description="Book a free intro call, send Ahmed a message, or reach him by email and public profiles.">
+<div class="container page">
+  <SectionHeading eyebrow="Contact" title="Talk to me" lede="Book a free 20-minute intro call, or send a message. I take 10 mentees a month, so I read every message myself." level={1} />
+  <p class="seats-badge reveal">10 seats a month</p>
+
+  <section aria-labelledby="c-book">
+    <h2 id="c-book">Book a free intro call</h2>
+    {booking ? (
+      <div class="reveal">
+        <iframe class="booking-embed" src={booking} title="Book a free 20-minute intro call" loading="lazy" referrerpolicy="no-referrer"></iframe>
+        <p><a class="button-secondary" href={booking}>Open booking calendar in a new tab →</a></p>
+      </div>
+    ) : (
+      <div class="card-simple reveal">
+        <p><strong>Booking calendar coming soon.</strong> Until then, use the form below with topic “Mentorship intro call” and suggest two times that suit you (include your time zone).</p>
+      </div>
+    )}
+  </section>
+
+
+
+  <section aria-labelledby="c-form">
+    <h2 id="c-form">Send a message</h2>
+    <ContactForm />
+  </section>
+
+  <section aria-labelledby="c-direct">
+    <h2 id="c-direct">Direct channels</h2>
+    <div class="card-simple card">
+      <p><strong>Email:</strong> <a href={`mailto:${site.email}`}>{site.email}</a> <button id="copyEmail" class="button-secondary small" data-email={site.email}>Copy email</button> <span id="copyStatus" role="status" aria-live="polite"></span></p>
+      <p><strong>GitHub:</strong> <a href={site.profiles.github}>{site.profiles.github}</a></p>
+      <p><strong>LinkedIn:</strong> <a href={site.profiles.linkedin}>{site.profiles.linkedin}</a></p>
+      <p class="muted">Booking runs through an external hosted tool; this site collects nothing itself.</p>
+    </div>
+  </section>
+</div>
+<script>
+  const btn = document.getElementById('copyEmail');
+  const status = document.getElementById('copyStatus');
+  btn?.addEventListener('click', async () => {
+    const email = btn.getAttribute('data-email') ?? '';
+    try { await navigator.clipboard.writeText(email); if (status) status.textContent = 'Copied ✓'; }
+    catch { if (status) status.textContent = 'Copy failed — select and copy manually.'; }
+  });
+</script>
+</BaseLayout>
+<style>
+  .page { padding-block: 3rem; } section { margin-top: var(--space-12); }
+  .card { padding: 1.6rem; } .muted { color: var(--color-text-muted); font-size: var(--text-sm); }
+  .booking-embed { width: 100%; height: 700px; border: 1px solid var(--color-border-strong); border-radius: var(--radius-lg); background: var(--color-bg-elevated); }
+  @media (max-width: 48rem) { .booking-embed { height: 620px; } }
+  .small { min-height: 2.2rem; padding: 0.4rem 0.9rem; font-size: var(--text-sm); }
+  #copyEmail { margin-inline-start: 0.6rem; }
+</style>

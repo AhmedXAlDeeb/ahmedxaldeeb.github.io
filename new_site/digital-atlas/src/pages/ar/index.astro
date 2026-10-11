@@ -1,0 +1,100 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import EarthScene from '../../components/scene/EarthScene.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { getCollection } from 'astro:content';
+import { url, slugOf, live } from '../../lib/url';
+import { site } from '../../data/site';
+import { stagesAr } from '../../data/mentorship';
+
+const articles = (await getCollection('articles')).filter(live('ar')).sort((a: any, b: any) => b.data.date.localeCompare(a.data.date)).slice(0, 2);
+const guides = (await getCollection('guides')).filter(live('ar')).slice(0, 1);
+const sessions = (await getCollection('sessions')).filter((s: any) => live('ar')(s) && s.data.status === 'upcoming').slice(0, 1);
+const booking = site.bookingUrl || url('/ar/contact/');
+const milestones = [
+  { t: 'جامعة القاهرة', d: 'خريج هندسة' },
+  { t: 'مهندس ذكاء اصطناعي', d: 'بناء وبحث في أنظمة الذكاء الاصطناعي' },
+  { t: 'عشرات الطلبات', d: 'والتعلّم ممن حصلوا على تمويل' },
+  { t: 'عروض ماجستير', d: 'قبل التخرج' },
+  { t: 'الإرشاد', d: '١٠ مقاعد شهريًا، بشكل فردي' },
+];
+---
+<BaseLayout title="أحمد سليمان — الأطلس الرقمي" description={site.descriptionAr} strip={false} lang="ar">
+<EarthScene front />
+
+<section class="hero container" aria-labelledby="hero-title">
+  <div class="hero__content">
+    <p class="eyebrow">أحمد سليمان · مهندس ذكاء اصطناعي · جامعة القاهرة</p>
+    <h1 id="hero-title">الدراسة العليا الممولة بالكامل ليست حظًا.</h1>
+    <p class="tagline">إنها عملية، ويمكن تعلّمها.</p>
+    <p class="sub">أنا أحمد، مهندس ذكاء اصطناعي وخريج جامعة القاهرة. قضيت عامين أدرس كيف تعمل هذه العملية فعلًا، وقدّمت على عشرات الفرص، وكانت بين يدي عروض ماجستير قبل تخرجي. اليوم أرشد عشرة طلاب شهريًا، بشكل فردي، نحو دراسة ممولة في كندا.</p>
+    <p class="seats-badge reveal">١٠ مقاعد شهريًا · ٦٠٠ جنيه داخل مصر · ٥٠ دولارًا لباقي العالم</p>
+    <div class="cta-row">
+      <a class="button-primary" href={booking}>احجز مكالمة تعريفية مجانية</a>
+      <a class="button-secondary" href={url('/ar/story/')}>اقرأ قصتي</a>
+    </div>
+  </div>
+</section>
+
+<div class="container">
+  <section class="journey-stop" aria-labelledby="s-story">
+    <SectionHeading eyebrow="المحطة ١ · الرحّالة" title="قصتي باختصار" level={2} />
+    <span id="s-story" hidden>story</span>
+    <div class="reading reveal">
+      <p>لمدة عامين تعاملت مع الحصول على دراسة عليا ممولة كأنها مشكلة هندسية: أدرس كيف يعمل القبول والتمويل فعليًا، وأتعلم من أشخاص سبقوني ونجحوا، ثم أقدّم وأقيس النتيجة وأصلح وأكرر. قدّمت على عشرات الفرص، وقبل تخرجي كانت بين يدي عروض ماجستير.</p>
+      <p>وفي الطريق بدأ أصدقائي يطلبون مساعدتي في الآيلتس والبحث عن مشرف وتعبئة طلبات التقديم، ونجح الأمر معهم أيضًا. لذلك أفتح الباب الآن بحرص: عشرة طلاب شهريًا، بشكل فردي.</p>
+
+    </div>
+  </section>
+
+  <section class="journey-stop" aria-labelledby="s-path">
+    <SectionHeading eyebrow="المحطة ٢ · الطريق" title="ست خطوات نحو عرض ممول" lede="نفس العلامات الست التي يمر بها الرحّالة على الأرض." />
+    <span id="s-path" hidden>path</span>
+    <ol class="steps">
+      {stagesAr.map((s) => <li class="card-simple reveal"><strong>{s.n}. {s.title}</strong><span>{s.text}</span></li>)}
+    </ol>
+    <p><a href={url('/ar/mentorship/')}>كيف يرافقك الإرشاد في هذه الخطوات ←</a></p>
+  </section>
+
+  <section class="journey-stop" aria-labelledby="s-mentor">
+    <SectionHeading eyebrow="المحطة ٣ · المرشد" title="إرشاد شخصي بإيقاع أسبوعي" lede="مكالمة فردية مدتها 90 دقيقة كل أسبوع، وخطة مكتوبة بتواريخ حقيقية، ومهام بملاحظات مكتوبة خلال ٤٨ ساعة. عشرة مقاعد فقط شهريًا، لتحصل على اهتمامي الحقيقي." />
+    <span id="s-mentor" hidden>mentorship</span>
+    <p><a href={url('/ar/mentorship/#why-one-to-one')}>لماذا فردي وليس جماعيًا؟ ←</a></p>
+    <div class="cta-row reveal">
+      <a class="button-primary" href={booking}>احجز مكالمة تعريفية مجانية</a>
+      <a class="button-secondary" href={url('/ar/mentorship/')}>العرض والأسعار والأسئلة</a>
+    </div>
+  </section>
+
+  <section class="journey-stop" aria-labelledby="s-learn">
+    <SectionHeading eyebrow="المحطة ٤ · المكتبة" title="تعلّم الطريق" />
+    <span id="s-learn" hidden>learn</span>
+    <div class="card-grid">
+      {articles.map((a: any) => <ArticleCard title={a.data.title} href={`/ar/learn/articles/${slugOf(a)}/`} date={a.data.date} tags={a.data.tags} summary={a.data.summary} kind="مقال" />)}
+      {guides.map((r: any) => <ArticleCard title={r.data.title} href={`/ar/learn/guides/${slugOf(r)}/`} date={`تحقق ${r.data.lastVerified}`} summary={r.data.summary} kind="دليل" />)}
+      {sessions.map((s: any) => <ArticleCard title={s.data.title} href={`/ar/learn/sessions/${slugOf(s)}/`} date={s.data.date} summary={s.data.description} kind="جلسة" />)}
+    </div>
+    <p><a href={url('/ar/learn/')}>كل المقالات والأدلة والجلسات ←</a></p>
+  </section>
+
+  <CtaBand title="عشرة مقاعد شهريًا. وتبدأ بحديث صريح." summary="عشرون دقيقة مجانية: ملفك وأهدافك ورأيي الصريح في هل أستطيع مساعدتك، وكيف." primaryHref={booking} primaryLabel="احجز مكالمة تعريفية مجانية" secondaryHref="/ar/contact/" secondaryLabel="بيانات التواصل" />
+</div>
+</BaseLayout>
+<style>
+  .hero { padding-block: clamp(5rem, 14vh, 9rem) clamp(8rem, 20vh, 12rem); position: relative; z-index: var(--z-content); }
+  .hero__content { max-width: 44rem; }
+  .eyebrow { color: var(--color-accent); font-weight: 700; letter-spacing: 0.02em; font-size: var(--text-sm); }
+  h1 { font-size: var(--text-hero); margin: 0.4rem 0; }
+  .tagline { font-size: var(--text-xl); font-weight: 600; color: var(--color-text); margin: 0 0 0.8rem; max-width: 38rem; }
+  .sub { color: var(--color-text-secondary); font-size: var(--text-xl); margin: 0 0 0.8rem; max-width: 38rem; }
+  .seats-badge { margin: 0 0 0.4rem; }
+  .cta-row { display: flex; gap: 0.8rem; flex-wrap: wrap; margin-top: 1.4rem; }
+  .strip-list { list-style: none; margin: 1.5rem 0 0; padding: 0; display: grid; gap: 0.6rem; }
+  .strip-list li { display: flex; gap: 0.8rem; align-items: baseline; border-inline-start: 3px solid var(--color-accent); padding-inline-start: 0.8rem; }
+  .strip-list span { color: var(--color-text-muted); }
+  .steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.75rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); }
+  .steps li { display: grid; gap: 0.3rem; }
+  .steps span { color: var(--color-text-muted); font-size: var(--text-sm); }
+</style>

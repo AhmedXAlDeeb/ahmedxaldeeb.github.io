@@ -1,0 +1,39 @@
+---
+import { site } from '../data/site';
+import { url } from '../lib/url';
+import { navLabels, t, type Lang } from '../i18n/ui';
+
+interface Props { lang?: Lang }
+const { lang = 'en' } = Astro.props as Props;
+const nav = navLabels[lang];
+const year = new Date().getFullYear();
+const booking = site.bookingUrl || (lang === 'ar' ? url('/ar/contact/') : url('/contact/'));
+const contactHref = lang === 'ar' ? url('/ar/contact/') : url('/contact/');
+---
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div>
+      <p class="brand-line"><strong>{lang === 'ar' ? 'الأطلس الرقمي' : 'The Digital Atlas'}</strong> · {site.author}</p>
+      <p class="muted">{t(lang, 'footerTagline')}</p>
+      <p class="muted">© {year} {site.author}. {t(lang, 'rights')}</p>
+    </div>
+    <nav aria-label="Footer">
+      {nav.map((n) => <a href={url(n.href)}>{n.label}</a>)}
+      <a href={url(lang === 'ar' ? '/ar/mentorship/' : '/mentorship/')}>{lang === 'ar' ? 'الإرشاد' : 'Mentorship'}</a>
+    </nav>
+    <div class="profiles">
+      <a href={booking}>{t(lang, 'bookFreeIntro')}</a>
+      <a href={`mailto:${site.email}`}>{lang === 'ar' ? 'البريد' : 'Email'}</a>
+      <a href={site.profiles.github}>GitHub</a>
+      <a href={site.profiles.linkedin}>LinkedIn</a>
+    </div>
+  </div>
+</footer>
+<style>
+  .site-footer { background: var(--color-bg); border-top: 1px solid var(--color-divider); margin-top: var(--space-24); padding: var(--space-12) 0; position: relative; z-index: 30; }
+  .footer-grid { display: grid; gap: 2rem; grid-template-columns: 1.4fr 1fr 1fr; }
+  .footer-grid nav, .profiles { display: flex; flex-direction: column; gap: 0.5rem; }
+  .muted { color: var(--color-text-muted); }
+  .brand-line { font-size: var(--text-lg); }
+  @media (max-width: 48rem) { .footer-grid { grid-template-columns: 1fr; } }
+</style>

@@ -1,0 +1,26 @@
+---
+interface Item { period: string; title: string; org?: string; details?: string[]; logo?: string; logoAlt?: string; }
+interface Props { items: Item[]; }
+const { items } = Astro.props as Props;
+---
+<ol class="timeline">
+  {items.map((it) => (
+    <li class="card-simple">
+      {it.logo && <img class="logo" src={it.logo} alt={it.logoAlt ?? `${it.org ?? it.title} logo`} width="80" height="80" loading="lazy" decoding="async" />}
+      <div>
+        <p class="period">{it.period}</p>
+        <h3>{it.title}</h3>
+        {it.org && <p class="org">{it.org}</p>}
+        {it.details?.length ? <ul>{it.details.map((d) => <li>{d}</li>)}</ul> : null}
+      </div>
+    </li>
+  ))}
+</ol>
+<style>
+  .timeline { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; }
+  .timeline > li { border-inline-start: 3px solid var(--color-accent); display: flex; gap: 1rem; align-items: flex-start; }
+  .logo { width: 5rem; height: 5rem; object-fit: contain; border-radius: var(--radius-md); background: var(--color-bg-glass-strong); flex-shrink: 0; }
+  .period { color: var(--color-accent); font-size: var(--text-sm); font-weight: 700; margin: 0; }
+  h3 { margin: 0.2rem 0; } .org { color: var(--color-text-secondary); margin: 0 0 0.4rem; }
+  ul { margin: 0.3rem 0 0; padding-inline-start: 1.2rem; color: var(--color-text-muted); }
+</style>

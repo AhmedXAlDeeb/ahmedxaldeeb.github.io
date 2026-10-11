@@ -1,0 +1,45 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Tag from '../../../components/Tag.astro';
+import Checklist from '../../../components/Checklist.astro';
+import { getCollection, render } from 'astro:content';
+import { url, slugOf, live } from '../../../lib/url';
+
+export async function getStaticPaths() {
+  const items = (await getCollection('sessions')).filter(live('en'));
+  return items.map((entry: any) => ({ params: { slug: slugOf(entry) }, props: { entry } }));
+}
+const { entry } = Astro.props as any;
+const { Content } = await render(entry);
+const d = entry.data;
+const upcoming = d.status === 'upcoming';
+---
+<BaseLayout title={`${d.title} — Sessions`} description={d.description} type="article">
+<div class="container page narrow">
+  <nav aria-label="Breadcrumb"><a href={url('/learn/')}>Learn</a> · <a href={url('/learn/sessions/')}>Sessions</a> / <span aria-current="page">{d.title}</span></nav>
+  <p class="badge">{upcoming ? 'Upcoming' : 'Past'} · {d.date} ({d.timezone}) · {d.durationMin} min</p>
+  <h1>{d.title}</h1>
+  <p class="lede">{d.description}</p>
+  {upcoming && d.registrationUrl && <p><a class="button-primary" href={d.registrationUrl}>Register for this session</a></p>}
+  {upcoming && !d.registrationUrl && <p class="muted">Registration link coming soon.</p>}
+  {!upcoming && d.videoUrl && (
+    <div class="video"><iframe src={d.videoUrl} title={`${d.title} recording`} loading="lazy" allow="accelerometer; encrypted-media; picture-in-picture" allowfullscreen></iframe></div>
+  )}
+  <div class="section--invert block">
+    <article class="prose"><Content /></article>
+  </div>
+  {d.takeaways.length > 0 && <Checklist title="Session takeaways" items={d.takeaways} />}
+  {d.slidesUrl && <p><a class="button-secondary" href={d.slidesUrl}>View slides</a></p>}
+</div>
+{upcoming && (
+<script type="application/ld+json" set:html={JSON.stringify({'@context':'https://schema.org','@type':'Event',name:d.title,startDate:d.date,eventStatus:'https://schema.org/EventScheduled'})} />
+)}
+</BaseLayout>
+<style>
+  .page { padding-block: 3rem; } .narrow { max-width: var(--reading-width); }
+  .badge { display: inline-block; border: 1px solid var(--color-border-strong); border-radius: var(--radius-pill); padding: 0.3rem 0.9rem; color: var(--color-text-secondary); }
+  .lede { color: var(--color-text-secondary); }
+  .muted { color: var(--color-text-muted); font-size: var(--text-sm); }
+  .video { aspect-ratio: 16/9; margin: 1.5rem 0; }
+  .video iframe { width: 100%; height: 100%; border: 1px solid var(--color-border); border-radius: var(--radius-md); }
+</style>

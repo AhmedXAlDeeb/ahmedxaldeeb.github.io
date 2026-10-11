@@ -1,0 +1,108 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import EarthScene from '../components/scene/EarthScene.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { getCollection } from 'astro:content';
+import { url, slugOf, live } from '../lib/url';
+import { site } from '../data/site';
+import { stages } from '../data/mentorship';
+
+const articles = (await getCollection('articles')).filter(live('en')).sort((a: any, b: any) => b.data.date.localeCompare(a.data.date)).slice(0, 2);
+const guides = (await getCollection('guides')).filter(live('en')).slice(0, 1);
+const sessions = (await getCollection('sessions')).filter((s: any) => live('en')(s) && s.data.status === 'upcoming').slice(0, 1);
+const booking = site.bookingUrl || url('/contact/');
+const milestones = [
+  { t: 'Cairo University', d: 'Engineering graduate' },
+  { t: 'AI Engineer', d: 'Building and researching AI systems' },
+  { t: 'Dozens of applications', d: 'Learning from people who got funded' },
+  { t: 'MSc offers', d: 'Before graduation' },
+  { t: 'Mentoring', d: '10 seats a month, one to one' },
+];
+---
+<BaseLayout title={site.title} description={site.description} strip={false}>
+<EarthScene front />
+
+<!-- Arrival -->
+<section class="hero container" aria-labelledby="hero-title">
+  <div class="hero__content">
+    <p class="eyebrow">Ahmed Soliman</p>
+    <h1 id="hero-title">A fully funded graduate degree isn't luck.</h1>
+    <p class="tagline">It's a process, and it can be learned.</p>
+    <p class="sub">I'm Ahmed, an AI engineer and Cairo University graduate. I spent two years studying how this process really works, applied to dozens of opportunities, and had MSc offers in hand before I graduated. Now I mentor ten students a month, one to one, toward funded study in Canada.</p>
+    <div class="cta-row">
+      <a class="button-primary" href={booking}>Book a free intro call</a>
+      <a class="button-secondary" href={url('/story/')}>Read my story</a>
+    </div>
+  </div>
+</section>
+
+<div class="container">
+  <!-- Story in brief -->
+  <section class="journey-stop" aria-labelledby="s-story">
+    <SectionHeading eyebrow="Stop 1 · The traveler" title="My story, in brief" level={2} />
+    <span id="s-story" hidden>story</span>
+    <div class="reading reveal">
+      <p>For two years I treated getting into a funded graduate program like an engineering problem: study how admission and funding actually work, learn from people who had already won, apply, measure, fix, repeat. I applied to dozens of opportunities, and before I graduated I had MSc offers in hand.</p>
+      <p>Along the way my friends started asking for help with IELTS, with finding supervisors, with their applications. It worked for them too. So I'm opening it up, carefully: ten students a month, one to one.</p>
+      <p>I can't promise admission or funding. Those decisions aren't mine. I can make your plan clear, your documents strong, and your timeline realistic. <a href={url('/story/')}>Read the full story →</a></p>
+      <ol class="strip-list">
+        {milestones.map((m) => <li><strong>{m.t}</strong><span>{m.d}</span></li>)}
+      </ol>
+    </div>
+  </section>
+
+  <!-- The path -->
+  <section class="journey-stop" aria-labelledby="s-path">
+    <SectionHeading eyebrow="Stop 2 · The path" title="Six steps to a funded offer" lede="The same six pins the walker passes on the Earth below." />
+    <span id="s-path" hidden>path</span>
+    <ol class="steps">
+      {stages.map((s) => <li class="card-simple reveal"><strong>{s.n}. {s.title}</strong><span>{s.text}</span></li>)}
+    </ol>
+    <p><a href={url('/mentorship/')}>How the mentorship walks these steps →</a></p>
+  </section>
+
+  <!-- Mentorship summary -->
+  <section class="journey-stop" aria-labelledby="s-mentor">
+    <SectionHeading eyebrow="Stop 3 · The guide" title="Personal mentorship, weekly rhythm" lede="A 45-minute one-to-one call every week, a written plan with real dates, and tasks with written feedback within 48 hours. Only ten seats a month, so you get my real attention." />
+    <span id="s-mentor" hidden>mentorship</span>
+    <p><a href={url('/mentorship/#why-one-to-one')}>Why one to one, and not a group? →</a></p>
+    <div class="cta-row reveal">
+      <a class="button-primary" href={booking}>Book a free intro call</a>
+      <a class="button-secondary" href={url('/mentorship/')}>Offer, pricing & FAQ</a>
+    </div>
+  </section>
+
+  <!-- Learn -->
+  <section class="journey-stop" aria-labelledby="s-learn">
+    <SectionHeading eyebrow="Stop 4 · The library" title="Learn the process" />
+    <span id="s-learn" hidden>learn</span>
+    <div class="card-grid">
+      {articles.map((a: any) => <ArticleCard title={a.data.title} href={`/learn/articles/${slugOf(a)}/`} date={a.data.date} tags={a.data.tags} summary={a.data.summary} kind="article" />)}
+      {guides.map((r: any) => <ArticleCard title={r.data.title} href={`/learn/guides/${slugOf(r)}/`} date={`Verified ${r.data.lastVerified}`} summary={r.data.summary} kind="guide" />)}
+      {sessions.map((s: any) => <ArticleCard title={s.data.title} href={`/learn/sessions/${slugOf(s)}/`} date={s.data.date} summary={s.data.description} kind="session" />)}
+    </div>
+    <p><a href={url('/learn/')}>All articles, guides & sessions →</a></p>
+  </section>
+
+  <!-- Final CTA -->
+  <CtaBand title="Ten seats a month. One honest conversation first." summary="Twenty free minutes: your profile, your goals, and my honest view on whether, and how, I can help." primaryHref={booking} primaryLabel="Book a free intro call" secondaryHref="/contact/" secondaryLabel="Contact details" />
+</div>
+</BaseLayout>
+<style>
+  .hero { padding-block: clamp(5rem, 14vh, 9rem) clamp(8rem, 20vh, 12rem); position: relative; z-index: var(--z-content); }
+  .hero__content { max-width: 44rem; }
+  .eyebrow { color: var(--color-accent); font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; font-size: var(--text-xs); }
+  h1 { font-size: var(--text-hero); margin: 0.4rem 0; }
+  .tagline { font-size: var(--text-xl); font-weight: 600; color: var(--color-text); margin: 0 0 0.8rem; max-width: 38rem; }
+  .sub { color: var(--color-text-secondary); font-size: var(--text-xl); margin: 0 0 0.8rem; max-width: 38rem; }
+  .seats-badge { margin: 0 0 0.4rem; }
+  .cta-row { display: flex; gap: 0.8rem; flex-wrap: wrap; margin-top: 1.4rem; }
+  .strip-list { list-style: none; margin: 1.5rem 0 0; padding: 0; display: grid; gap: 0.6rem; }
+  .strip-list li { display: flex; gap: 0.8rem; align-items: baseline; border-inline-start: 3px solid var(--color-accent); padding-inline-start: 0.8rem; }
+  .strip-list span { color: var(--color-text-muted); }
+  .steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.75rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); }
+  .steps li { display: grid; gap: 0.3rem; }
+  .steps span { color: var(--color-text-muted); font-size: var(--text-sm); }
+</style>

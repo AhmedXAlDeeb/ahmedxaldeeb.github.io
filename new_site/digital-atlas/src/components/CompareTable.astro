@@ -1,0 +1,45 @@
+---
+import Icon from './Icon.astro';
+
+interface Row { key: string; one: string; group: string }
+interface Props {
+  caption: string;
+  headMatter: string; headOne: string; headGroup: string;
+  rows: Row[];
+}
+const { caption, headMatter, headOne, headGroup, rows } = Astro.props as Props;
+---
+<div class="table-wrap">
+<table class="compare">
+  <caption>{caption}</caption>
+  <thead>
+    <tr><th scope="col">{headMatter}</th><th scope="col"><span class="th-flex"><Icon name="check" size={16} /> {headOne}</span></th><th scope="col"><span class="th-flex"><Icon name="cross" size={16} /> {headGroup}</span></th></tr>
+  </thead>
+  <tbody>
+    {rows.map((r) => (
+      <tr>
+        <th scope="row">{r.key}</th>
+        <td data-label={headOne}><span class="cell"><Icon name="check" size={16} /> {r.one}</span></td>
+        <td data-label={headGroup}><span class="cell dim"><Icon name="cross" size={16} /> {r.group}</span></td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+</div>
+<style>
+  .table-wrap { overflow-x: auto; }
+  .compare { width: 100%; border-collapse: collapse; font-size: var(--text-sm); }
+  caption { text-align: start; font-weight: 700; margin-bottom: 0.6rem; }
+  th, td { border: 1px solid var(--color-border-strong); padding: 0.65rem 0.85rem; text-align: start; vertical-align: top; }
+  thead th { background: var(--color-bg-elevated); }
+  .th-flex, .cell { display: inline-flex; gap: 0.45rem; align-items: flex-start; }
+  .dim { color: var(--color-text-muted); }
+  @media (max-width: 40rem) {
+    thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+    .compare, tbody, tr, th, td { display: block; width: 100%; }
+    tbody tr { border: 1px solid var(--color-border-strong); border-radius: var(--radius-md); margin-bottom: 0.75rem; overflow: hidden; }
+    tbody th, tbody td { border: 0; border-bottom: 1px solid var(--color-divider); }
+    tbody td:last-child { border-bottom: 0; }
+    tbody td::before { content: attr(data-label); display: block; font-weight: 700; font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.25rem; }
+  }
+</style>

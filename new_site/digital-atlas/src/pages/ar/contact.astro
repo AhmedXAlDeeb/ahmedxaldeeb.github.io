@@ -1,0 +1,70 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
+import ContactForm from '../../components/ContactForm.astro';
+import { site } from '../../data/site';
+import { url } from '../../lib/url';
+import { t } from '../../i18n/ui';
+
+const booking = site.bookingUrl;
+---
+<BaseLayout title="تواصل — أحمد سليمان" description="احجز مكالمة تعريفية مجانية، أو أرسل رسالة لأحمد، أو تواصل بالبريد والقنوات العامة." lang="ar">
+<div class="container page">
+  <SectionHeading eyebrow="تواصل" title="كلّمني" lede="احجز مكالمة تعريفية مجانية مدتها ٢٠ دقيقة، أو أرسل رسالة. أقبل ١٠ طلاب شهريًا، لذلك أقرأ كل رسالة بنفسي." level={1} />
+  <p class="seats-badge reveal">١٠ مقاعد شهريًا</p>
+
+  <section aria-labelledby="c-book">
+    <h2 id="c-book">احجز مكالمة تعريفية مجانية</h2>
+    {booking ? (
+      <div class="reveal">
+        <iframe class="booking-embed" src={booking} title="احجز مكالمة تعريفية مجانية مدتها ٢٠ دقيقة" loading="lazy" referrerpolicy="no-referrer"></iframe>
+        <p><a class="button-secondary" href={booking}>افتح تقويم الحجز في تبويب جديد ←</a></p>
+      </div>
+    ) : (
+      <div class="card-simple reveal">
+        <p><strong>تقويم الحجز قريبًا.</strong> وحتى ذلك الحين، استخدم النموذج أدناه بموضوع «مكالمة تعريفية للإرشاد» واقترح موعدين يناسبانك (مع منطقتك الزمنية).</p>
+      </div>
+    )}
+  </section>
+
+  <section aria-labelledby="c-price">
+    <h2 id="c-price">الأسعار والدفع</h2>
+    <div class="card-simple reveal">
+      <p><strong>٦٠٠ جنيه / شهريًا</strong> للطلاب في مصر · <strong>٥٠ دولارًا / شهريًا</strong> لباقي العالم · شهرًا بشهر · تُرسل تفاصيل الدفع بعد مكالمتنا التعريفية.</p>
+    </div>
+  </section>
+
+  <section aria-labelledby="c-form">
+    <h2 id="c-form">أرسل رسالة</h2>
+    <ContactForm lang="ar" />
+  </section>
+
+  <section aria-labelledby="c-direct">
+    <h2 id="c-direct">قنوات مباشرة</h2>
+    <div class="card-simple card">
+      <p><strong>البريد:</strong> <a href={`mailto:${site.email}`}>{site.email}</a> <button id="copyEmail" class="button-secondary small" data-email={site.email}>انسخ البريد</button> <span id="copyStatus" role="status" aria-live="polite"></span></p>
+      <p><strong>الهاتف:</strong> {site.phone}</p>
+      <p><strong>GitHub:</strong> <a href={site.profiles.github}>{site.profiles.github}</a></p>
+      <p><strong>LinkedIn:</strong> <a href={site.profiles.linkedin}>{site.profiles.linkedin}</a></p>
+      <p class="muted">الحجز عبر أداة خارجية؛ وهذا الموقع لا يجمع شيئًا بنفسه.</p>
+    </div>
+  </section>
+</div>
+<script>
+  const btn = document.getElementById('copyEmail');
+  const status = document.getElementById('copyStatus');
+  btn?.addEventListener('click', async () => {
+    const email = btn.getAttribute('data-email') ?? '';
+    try { await navigator.clipboard.writeText(email); if (status) status.textContent = 'تم النسخ ✓'; }
+    catch { if (status) status.textContent = 'تعذّر النسخ — حدّد البريد وانسخه يدويًا.'; }
+  });
+</script>
+</BaseLayout>
+<style>
+  .page { padding-block: 3rem; } section { margin-top: var(--space-12); }
+  .card { padding: 1.6rem; } .muted { color: var(--color-text-muted); font-size: var(--text-sm); }
+  .booking-embed { width: 100%; height: 700px; border: 1px solid var(--color-border-strong); border-radius: var(--radius-lg); background: var(--color-bg-elevated); }
+  @media (max-width: 48rem) { .booking-embed { height: 620px; } }
+  .small { min-height: 2.2rem; padding: 0.4rem 0.9rem; font-size: var(--text-sm); }
+  #copyEmail { margin-inline-start: 0.6rem; }
+</style>

@@ -1,0 +1,68 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Tag from '../../../components/Tag.astro';
+import { getCollection, render } from 'astro:content';
+import { url, slugOf, live } from '../../../lib/url';
+
+export async function getStaticPaths() {
+  const items = (await getCollection('articles')).filter(live('en'));
+  return items.map((entry: any) => ({ params: { slug: slugOf(entry) }, props: { entry } }));
+}
+const { entry } = Astro.props as any;
+const { Content, headings } = await render(entry);
+const mine = slugOf(entry);
+const related = (await getCollection('articles')).filter(live('en')).filter((w: any) => slugOf(w) !== mine && (w.data.tags as string[]).some((t) => (entry.data.tags as string[]).includes(t))).slice(0, 3);
+// Series neighbours (same series + language, ordered): powers the part-nav.
+const seriesName: string | undefined = entry.data.series;
+const seriesParts: any[] = seriesName
+  ? (await getCollection('articles'))
+      .filter(live('en'))
+      .filter((w: any) => w.data.series === seriesName)
+      .sort((a: any, b: any) => (a.data.seriesOrder ?? 999) - (b.data.seriesOrder ?? 999))
+  : [];
+const partIndex = seriesParts.findIndex((w: any) => slugOf(w) === mine);
+const prevPart = partIndex > 0 ? seriesParts[partIndex - 1] : null;
+const nextPart = partIndex >= 0 && partIndex < seriesParts.length - 1 ? seriesParts[partIndex + 1] : null;
+function readingTime(text: string) { return `${Math.max(1, Math.round(text.split(/\s+/).length / 200))} min read`; }
+---
+<BaseLayout title={`${entry.data.title} — Learn`} description={entry.data.summary} type="article">
+<div class="container page wide">
+  <nav aria-label="Breadcrumb"><a href={url('/learn/')}>Learn</a> / <span aria-current="page">{entry.data.title}</span></nav>
+  <h1>{entry.data.title}</h1>
+  <p class="meta"><time>{entry.data.date}</time> · {entry.data.category} · {entry.body ? readingTime(entry.body) : ''}</p>
+  <div class="tags">{entry.data.tags.map((t: string) => <Tag tag={t} />)}</div>
+  <div class="layout">
+    {headings.length > 2 && (
+    <aside class="card-simple toc" aria-label="Table of contents">
+      <h2>Contents</h2>
+      <ol>{headings.map((h: any) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}</ol>
+    </aside>)}
+    <div class="section--invert block">
+      <article class="prose"><Content /></article>
+    </div>
+  </div>
+  {seriesParts.length > 1 && (
+    <nav class="series-nav card-simple" aria-label="Parts in this series">
+      <p class="series-kicker">Part {partIndex + 1} of {seriesParts.length} in this series</p>
+      <div class="series-links">
+        {prevPart ? <a href={url(`/learn/articles/${slugOf(prevPart)}/`)}>← {prevPart.data.title}</a> : <span />}
+        {nextPart ? <a href={url(`/learn/articles/${slugOf(nextPart)}/`)}>{nextPart.data.title} →</a> : <span />}
+      </div>
+    </nav>
+  )}
+  {related.length ? (<section><h2>Related</h2><ul>{related.map((r: any) => <li><a href={url(`/learn/articles/${slugOf(r)}/`)}>{r.data.title}</a></li>)}</ul></section>) : null}
+  {entry.data.sources.length ? (<section><h2>Sources</h2><ul>{entry.data.sources.map((s: any) => <li><a href={s.url}>{s.title}</a></li>)}</ul></section>) : null}
+</div>
+<script type="application/ld+json" set:html={JSON.stringify({'@context':'https://schema.org','@type':'Article',headline:entry.data.title,datePublished:entry.data.date})} />
+</BaseLayout>
+<style>
+  .page { padding-block: 3rem; } .narrow { max-width: var(--reading-width); } .wide { max-width: calc(var(--reading-width) + 17rem); } h1 { font-size: var(--text-2xl); }
+  .meta { color: var(--color-accent); } .tags { display: flex; gap: 0.4rem; margin: 0.8rem 0 1.5rem; flex-wrap: wrap; }
+  .layout { display: grid; gap: 2rem; } .toc { padding: 1rem 1.2rem; } .toc ol { margin: 0.4rem 0; padding-inline-start: 1.2rem; }
+  .series-nav { padding: 1rem 1.2rem; margin: 0 0 1.5rem; }
+  .series-kicker { margin: 0 0 0.5rem; font-size: var(--text-sm); color: var(--color-text-muted); font-weight: 700; }
+  .series-links { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+  .prose :global(pre) { background: var(--color-bg-elevated); border: 1px solid var(--color-border); padding: 1rem; border-radius: var(--radius-md); overflow: auto; }
+  .prose :global(img) { border-radius: var(--radius-md); border: 1px solid var(--color-border); }
+  @media (min-width: 60rem) { .layout { grid-template-columns: 14rem 1fr; } .toc { position: sticky; top: 6rem; align-self: start; } }
+</style>

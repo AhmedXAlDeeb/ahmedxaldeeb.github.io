@@ -1,0 +1,28 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="Design system — dev only" description="Token showcase." noindex>
+<div class="container page">
+  <h1>Black & white tokens</h1>
+  <div class="swatches">
+    <div style="background:var(--color-ink);color:var(--color-paper)">Ink</div>
+    <div style="background:var(--color-charcoal);color:var(--color-paper)">Charcoal</div>
+    <div style="background:var(--color-graphite);color:var(--color-paper)">Graphite</div>
+    <div style="background:var(--color-ash);color:var(--color-ink)">Ash</div>
+    <div style="background:var(--color-paper);color:var(--color-ink)">Paper</div>
+    <div style="background:var(--color-mist);color:var(--color-ink)">Mist</div>
+    <div style="background:var(--color-slate);color:var(--color-paper)">Slate</div>
+  </div>
+  <p><a class="button-primary" href="#">Primary</a> <a class="button-secondary" href="#">Secondary</a> <button class="button-primary" disabled>Disabled</button></p>
+  <div class="card-simple">Simple card sample with <a href="#">link</a> and focus test.</div>
+  <p>Body text with a <a href="#">body link (always underlined)</a> inside.</p>
+  <div class="section--invert block">
+    <h2>Inverted block</h2>
+    <p>Light section rhythm with a <a href="#">link</a> and <button class="button-primary">button</button>.</p>
+  </div>
+</div>
+</BaseLayout>
+<style>
+  .page { padding-block: 3rem; display: grid; gap: 1rem; } .swatches { display: grid; grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr)); gap: 0.6rem; margin: 1.5rem 0; }
+  .swatches div { padding: 1.2rem; border-radius: var(--radius-md); border: 1px solid var(--color-border); }
+</style>

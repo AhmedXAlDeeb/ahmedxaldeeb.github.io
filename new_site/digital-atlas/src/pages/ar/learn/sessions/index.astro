@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import SectionHeading from '../../../../components/SectionHeading.astro';
+import ArticleCard from '../../../../components/ArticleCard.astro';
+import { getCollection } from 'astro:content';
+import { slugOf, live } from '../../../../lib/url';
+
+const sessions = (await getCollection('sessions')).filter(live('ar')).sort((a: any, b: any) => a.data.date.localeCompare(b.data.date));
+const upcoming = sessions.filter((s: any) => s.data.status === 'upcoming');
+const past = sessions.filter((s: any) => s.data.status === 'past');
+---
+<BaseLayout title="الجلسات — تعلّم" description="ورش حية ولقاءات مسجلة عن الدراسة الممولة في كندا." lang="ar">
+<div class="container page">
+  <SectionHeading eyebrow="تعلّم · الجلسات" title="جلسات حية ومسجلة" level={1} />
+  <h2>القادمة</h2>
+  {upcoming.length === 0 && <p class="muted">لا جلسات مجدولة بعد — عد قريبًا.</p>}
+  <div class="card-grid">
+    {upcoming.map((s: any) => <ArticleCard title={s.data.title} href={`/ar/learn/sessions/${slugOf(s)}/`} date={`${s.data.date} (${s.data.timezone})`} summary={s.data.description} kind="قادمة" />)}
+  </div>
+  <h2>السابقة</h2>
+  {past.length === 0 && <p class="muted">ستظهر التسجيلات هنا.</p>}
+  <div class="card-grid">
+    {past.map((s: any) => <ArticleCard title={s.data.title} href={`/ar/learn/sessions/${slugOf(s)}/`} date={s.data.date} summary={s.data.description} kind="سابقة" />)}
+  </div>
+</div>
+</BaseLayout>
+<style>
+  .page { padding-block: 3rem; } h2 { margin-top: var(--space-12); } .muted { color: var(--color-text-muted); }
+</style>

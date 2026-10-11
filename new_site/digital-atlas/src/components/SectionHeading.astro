@@ -1,0 +1,17 @@
+---
+interface Props { eyebrow?: string; title: string; lede?: string; align?: 'left' | 'center'; level?: 1 | 2; }
+const { eyebrow, title, lede, align = 'left', level = 2 } = Astro.props as Props;
+const Tag = level === 1 ? 'h1' : 'h2';
+---
+<div class:list={['section-head', align]}>
+  {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+  <Tag>{title}</Tag>
+  {lede && <p class="lede">{lede}</p>}
+</div>
+<style>
+  .section-head { margin-bottom: var(--space-8); max-width: 44rem; }
+  .section-head.center { text-align: center; margin-inline: auto; }
+  .eyebrow { color: var(--color-accent); font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; font-size: var(--text-xs); margin: 0 0 0.5rem; }
+  h1, h2 { font-size: var(--text-2xl); margin: 0 0 0.5rem; }
+  .lede { color: var(--color-text-muted); margin: 0; }
+</style>

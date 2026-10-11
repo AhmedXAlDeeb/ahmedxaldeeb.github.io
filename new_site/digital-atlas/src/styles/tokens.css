@@ -1,0 +1,114 @@
+:root {
+  /* core palette */
+  --color-ink: #0A0A0A;
+  --color-charcoal: #161616;
+  --color-graphite: #2B2B2B;
+  --color-ash: #A3A3A3;
+  --color-paper: #FFFFFF;
+  --color-mist: #F2F2F2;
+  --color-slate: #525252;
+
+  /* semantic backgrounds */
+  --color-bg: var(--color-ink);
+  --color-bg-elevated: var(--color-charcoal);
+  --color-bg-muted: #101010;
+  --color-bg-glass: rgb(22 22 22 / 72%);
+  --color-bg-glass-strong: rgb(10 10 10 / 92%);
+
+  /* text */
+  --color-text: var(--color-paper);
+  --color-text-secondary: #D4D4D4;
+  --color-text-muted: var(--color-ash);
+  --color-text-on-accent: var(--color-ink);
+
+  /* "accent" is now white: primary actions, links, active states */
+  --color-accent: var(--color-paper);
+  --color-accent-soft: var(--color-mist);
+  --color-accent-hover: var(--color-mist);
+  --color-focus: var(--color-paper);
+  --color-link: var(--color-paper);
+  --color-link-hover: #D4D4D4;
+
+  /* borders and depth */
+  --color-border: rgb(255 255 255 / 18%);
+  --color-border-strong: rgb(255 255 255 / 45%);
+  --color-divider: rgb(255 255 255 / 12%);
+  --color-shadow: rgb(0 0 0 / 45%);
+  --color-glow: rgb(255 255 255 / 10%);
+
+  /* typography */
+  --font-body: Inter, "Noto Sans Arabic", "Segoe UI", Tahoma, sans-serif;
+  --font-heading: Inter, "Segoe UI", sans-serif;
+  --font-mono: "SFMono-Regular", Consolas, monospace;
+  --text-xs: 0.75rem;  --text-sm: 0.875rem; --text-base: 1rem;
+  --text-lg: 1.125rem; --text-xl: 1.375rem;
+  --text-2xl: clamp(1.75rem, 4vw, 2.75rem);
+  --text-hero: clamp(2.5rem, 6vw, 4.75rem);
+  --line-height-body: 1.7;
+  --line-height-heading: 1.12;
+  --content-width: 64rem;
+  --reading-width: 68ch;
+
+  /* spacing */
+  --space-1: 0.25rem; --space-2: 0.5rem; --space-3: 0.75rem; --space-4: 1rem;
+  --space-6: 1.5rem;  --space-8: 2rem;   --space-12: 3rem;   --space-16: 4rem; --space-24: 6rem;
+
+  /* shape */
+  --radius-sm: 0.5rem; --radius-md: 0.875rem; --radius-lg: 1.25rem;
+  --radius-xl: 1.75rem; --radius-pill: 999px;
+
+  /* glass */
+  --glass-blur: 18px;
+  --glass-border: 1px solid var(--color-border);
+  --glass-shadow: 0 16px 48px var(--color-shadow), inset 0 1px 0 rgb(255 255 255 / 7%);
+
+  /* motion */
+  --motion-fast: 160ms; --motion-standard: 280ms; --motion-slow: 650ms;
+  --ease-standard: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+  /* layout */
+  --header-height: 4.75rem;
+  --page-gutter: clamp(1.25rem, 5vw, 4rem);
+  --z-orbit-scene: 0; --z-content: 1; --z-header: 20; --z-overlay: 40;
+
+  /* scene */
+  --earth-fill: var(--color-ink);
+  --earth-outline: var(--color-paper);
+  --earth-rim: var(--color-paper);
+  --earth-rim-glow: rgb(255 255 255 / 22%);
+  --star-color: var(--color-paper);
+  --character-stroke: var(--color-paper);
+  --character-fill: var(--color-ink);
+  --character-accent: var(--color-paper);
+  --earth-size: clamp(90vw, 120vw, 160rem);
+  --horizon-offset: 28vh;
+  --scene-parallax: 0;
+}
+
+/* Inverted (light) sections */
+.section--invert {
+  --color-bg: var(--color-paper);
+  --color-bg-elevated: var(--color-mist);
+  --color-bg-muted: var(--color-mist);
+  --color-bg-glass: rgb(242 242 242 / 90%);
+  --color-bg-glass-strong: rgb(255 255 255 / 96%);
+  --color-text: var(--color-ink);
+  --color-text-secondary: #2B2B2B;
+  --color-text-muted: var(--color-slate);
+  --color-text-on-accent: var(--color-paper);
+  --color-accent: var(--color-ink);
+  --color-accent-soft: #2B2B2B;
+  --color-accent-hover: #2B2B2B;
+  --color-focus: var(--color-ink);
+  --color-link: var(--color-ink);
+  --color-link-hover: #2B2B2B;
+  --color-border: rgb(10 10 10 / 18%);
+  --color-border-strong: rgb(10 10 10 / 55%);
+  --color-divider: rgb(10 10 10 / 12%);
+  --color-shadow: rgb(0 0 0 / 12%);
+  --earth-outline: var(--color-ink);
+  --character-stroke: var(--color-ink);
+  --character-fill: var(--color-paper);
+  background: var(--color-bg);
+  color: var(--color-text);
+}

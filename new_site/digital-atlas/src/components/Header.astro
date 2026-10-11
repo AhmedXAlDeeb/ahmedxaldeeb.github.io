@@ -1,0 +1,110 @@
+---
+import { site } from '../data/site';
+import { url, slugOf, langOf } from '../lib/url';
+import { navLabels, t, type Lang } from '../i18n/ui';
+import { getCollection } from 'astro:content';
+
+interface Props { lang?: Lang }
+const { lang = 'en' } = Astro.props as Props;
+const nav = navLabels[lang];
+const other: Lang = lang === 'ar' ? 'en' : 'ar';
+const otherLabel = other === 'ar' ? 'العربية' : 'English';
+const current = Astro.url.pathname;
+function isActive(href: string) {
+  const full = url(href);
+  return current === full || (href !== '/' && href !== '/ar/' && current.startsWith(full));
+}
+const booking = site.bookingUrl || (lang === 'ar' ? url('/ar/contact/') : url('/contact/'));
+const home = lang === 'ar' ? url('/ar/') : url('/');
+
+// Language switcher target: link the real mirror when it exists,
+// otherwise fall back to the other language's home (never a dead URL).
+const arRoots = new Set(['/', '/story/', '/mentorship/', '/learn/', '/learn/sessions/', '/contact/']);
+const arSlugs = new Set<string>();
+for (const coll of ['articles', 'guides', 'sessions'] as const) {
+  for (const e of (await getCollection(coll)) as any[]) {
+    if (langOf(e) === 'ar' && !e.data.draft) arSlugs.add(`/learn/${coll}/${slugOf(e)}/`);
+  }
+}
+function mirrorTarget(): string {
+  if (lang === 'ar') {
+    if (current === '/ar' || current === '/ar/') return '/';
+    return current.startsWith('/ar/') ? current.slice(3) : current;
+  }
+  if (arRoots.has(current)) return current === '/' ? '/ar/' : `/ar${current}`;
+  if (arSlugs.has(current)) return `/ar${current}`;
+  if (current.startsWith('/learn/')) return '/ar/learn/';
+  return '/ar/';
+}
+const switchHref = mirrorTarget();
+---
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href={home} aria-label={lang === 'ar' ? 'الأطلس الرقمي — الرئيسية' : 'The Digital Atlas — home'}>
+      <svg width="40" height="22" viewBox="0 0 40 22" fill="none" aria-hidden="true">
+        <path d="M2 20 A 24 24 0 0 1 38 20" stroke="currentColor" stroke-width="1.6"/>
+        <circle cx="26" cy="9.5" r="2.1" stroke="currentColor" stroke-width="1.4"/>
+        <path d="M26 7.4v4.2M23.9 9.5h4.2" stroke="currentColor" stroke-width="1.1"/>
+      </svg>
+      <span><strong>Digital Atlas</strong></span>
+    </a>
+    <nav class="desktop-nav" aria-label="Primary">
+      {nav.map((n) => (
+        <a href={url(n.href)} aria-current={isActive(n.href) ? 'page' : undefined} class:list={{ active: isActive(n.href) }}>{n.label}</a>
+      ))}
+    </nav>
+    <div class="header-cta">
+      <a class="button-primary small" href={booking}>{t(lang, 'bookIntro')}</a>
+      <a class="lang-switch" href={switchHref} hreflang={other} aria-label={other === 'ar' ? 'التبديل إلى العربية' : 'Switch to English'}>{otherLabel}</a>
+      <button class="menu-btn button-secondary small" id="menuBtn" aria-expanded="false" aria-controls="mobileMenu">{t(lang, 'menu')}</button>
+    </div>
+  </div>
+  <nav class="mobile-nav" id="mobileMenu" aria-label="Mobile" hidden>
+    {nav.map((n) => (
+      <a href={url(n.href)} aria-current={isActive(n.href) ? 'page' : undefined}>{n.label}</a>
+    ))}
+    <a class="button-primary small" href={booking}>{t(lang, 'bookIntro')}</a>
+    <p class="menu-seats">{lang === 'ar' ? '١٠ مقاعد شهريًا' : '10 seats a month'}</p>
+  </nav>
+</header>
+<script>
+  const btn = document.getElementById('menuBtn');
+  const menu = document.getElementById('mobileMenu');
+  btn?.addEventListener('click', () => {
+    if (!menu || !btn) return;
+    const open = menu.hidden;
+    menu.hidden = !open;
+    btn.setAttribute('aria-expanded', String(open));
+    if (open) (menu.querySelector('a') as HTMLElement)?.focus();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && menu && !menu.hidden) {
+      menu.hidden = true; btn?.setAttribute('aria-expanded', 'false'); (btn as HTMLElement)?.focus();
+    }
+  });
+  // If the menu is open and the viewport grows to desktop, close it.
+  window.matchMedia('(min-width: 56rem)').addEventListener('change', (e) => {
+    if (e.matches && menu && !menu.hidden) {
+      menu.hidden = true; btn?.setAttribute('aria-expanded', 'false');
+    }
+  });
+</script>
+<style>
+  .site-header { position: sticky; top: 0; z-index: var(--z-header); background: var(--color-bg-glass-strong); backdrop-filter: blur(var(--glass-blur)); -webkit-backdrop-filter: blur(var(--glass-blur)); border-bottom: 1px solid var(--color-divider); }
+  .header-inner { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: var(--header-height); }
+  .brand { display: flex; align-items: center; gap: 0.5rem; color: var(--color-text); text-decoration: none; }
+  .desktop-nav { display: flex; gap: 1.25rem; }
+  .desktop-nav a { color: var(--color-text); text-decoration: none; padding: 0.4rem 0.1rem; position: relative; }
+  .desktop-nav a.active::after { content: ""; position: absolute; left: 0; right: 0; bottom: -2px; height: 3px; border-radius: 999px; background: var(--color-accent); }
+  .desktop-nav a[aria-current="page"] { color: var(--color-accent-soft); }
+  .header-cta { display: flex; gap: 0.6rem; align-items: center; }
+  .lang-switch { font-size: var(--text-sm); font-weight: 700; white-space: nowrap; }
+  .small { min-height: 2.4rem; padding: 0.5rem 1.1rem; font-size: var(--text-sm); }
+  .menu-btn { display: none; }
+  .mobile-nav { display: flex; flex-direction: column; padding: 0 1.5rem 1rem; gap: 0.25rem; }
+  .mobile-nav[hidden] { display: none; }
+  .mobile-nav a:not(.button-primary) { padding: 0.8rem 0.25rem; border-top: 1px solid var(--color-divider); text-decoration: none; color: var(--color-text); min-height: 44px; }
+  .mobile-nav .button-primary { margin-top: 0.6rem; }
+  .menu-seats { color: var(--color-text-muted); font-size: var(--text-sm); font-weight: 700; margin: 0.6rem 0 0; padding-inline-start: 0.25rem; }
+  @media (max-width: 56rem) { .desktop-nav, .header-cta .button-primary { display: none; } .menu-btn { display: inline-flex; } }
+</style>

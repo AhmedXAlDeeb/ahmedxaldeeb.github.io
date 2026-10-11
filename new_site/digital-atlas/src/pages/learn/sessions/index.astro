@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import SectionHeading from '../../../components/SectionHeading.astro';
+import ArticleCard from '../../../components/ArticleCard.astro';
+import { getCollection } from 'astro:content';
+import { slugOf, live } from '../../../lib/url';
+
+const sessions = (await getCollection('sessions')).filter(live('en')).sort((a: any, b: any) => a.data.date.localeCompare(b.data.date));
+const upcoming = sessions.filter((s: any) => s.data.status === 'upcoming');
+const past = sessions.filter((s: any) => s.data.status === 'past');
+---
+<BaseLayout title="Sessions — Learn" description="Live workshops and recorded Q&A on funded graduate study in Canada.">
+<div class="container page">
+  <SectionHeading eyebrow="Learn · Sessions" title="Live & recorded sessions" level={1} />
+  <h2>Upcoming</h2>
+  {upcoming.length === 0 && <p class="muted">No sessions scheduled yet — check back soon.</p>}
+  <div class="card-grid">
+    {upcoming.map((s: any) => <ArticleCard title={s.data.title} href={`/learn/sessions/${slugOf(s)}/`} date={`${s.data.date} (${s.data.timezone})`} summary={s.data.description} kind="upcoming" />)}
+  </div>
+  <h2>Past</h2>
+  {past.length === 0 && <p class="muted">Recordings will appear here.</p>}
+  <div class="card-grid">
+    {past.map((s: any) => <ArticleCard title={s.data.title} href={`/learn/sessions/${slugOf(s)}/`} date={s.data.date} summary={s.data.description} kind="past" />)}
+  </div>
+</div>
+</BaseLayout>
+<style>
+  .page { padding-block: 3rem; } h2 { margin-top: var(--space-12); } .muted { color: var(--color-text-muted); }
+</style>

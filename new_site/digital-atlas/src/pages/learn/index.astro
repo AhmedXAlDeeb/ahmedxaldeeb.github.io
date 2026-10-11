@@ -1,0 +1,149 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import { getCollection } from 'astro:content';
+import { url, slugOf, live } from '../../lib/url';
+
+const articles = (await getCollection('articles')).filter(live('en')).sort((a: any, b: any) => b.data.date.localeCompare(a.data.date));
+const guides = (await getCollection('guides')).filter(live('en')).sort((a: any, b: any) => b.data.lastVerified.localeCompare(a.data.lastVerified));
+const sessions = (await getCollection('sessions')).filter(live('en')).sort((a: any, b: any) => a.data.date.localeCompare(b.data.date));
+const upcoming = sessions.filter((s: any) => s.data.status === 'upcoming');
+const past = sessions.filter((s: any) => s.data.status === 'past');
+// Topics derived from real content so every chip matches something.
+const topics = [...new Set([
+  ...articles.flatMap((a: any) => a.data.tags as string[]),
+  ...guides.map((g: any) => g.data.topic as string),
+  ...sessions.flatMap((s: any) => s.data.topic as string[]),
+])].sort((a, b) => a.localeCompare(b)) as string[];
+const norm = (s: string) => s.toLowerCase().trim();
+---
+<BaseLayout title="Learn — Articles, Guides & Sessions" description="Tutorials, dated sourced guides, and live sessions on funded graduate study in Canada — plus technical notes.">
+<div class="container page">
+  <SectionHeading eyebrow="Learn" title="Articles, guides & sessions" lede="Guides carry last-verified dates and official sources. Verify before acting." level={1} />
+  <div class="searchbox card-simple">
+    <label for="q">Search the library</label>
+    <input id="q" type="search" placeholder="Type to filter articles, guides, and sessions…" autocomplete="off" />
+  </div>
+  <div class="filters" role="group" aria-label="Filter by topic" id="topicFilters">
+    <button type="button" data-topic="" aria-pressed="true">All</button>
+    {topics.map((t) => <button type="button" data-topic={norm(t)} aria-pressed="false">{t}</button>)}
+  </div>
+  <p class="muted" role="status" aria-live="polite" id="resultCount"></p>
+
+  <section aria-labelledby="h-sessions" data-section>
+    <h2 id="h-sessions">Sessions</h2>
+    {upcoming.length === 0 && past.length === 0 && (
+      <div class="card-simple reveal"><p><strong>First session announced soon.</strong> Live workshops and Q&A on supervisors, documents, and applications. <a href={url('/contact/')}>Tell me what topic you need →</a></p></div>
+    )}
+    <div class="card-grid" data-grid>
+      {upcoming.map((s: any) => (
+        <div class="filter-item" data-topics={(s.data.topic as string[]).map(norm).join(' ')} data-status="upcoming">
+          <ArticleCard title={s.data.title} href={`/learn/sessions/${slugOf(s)}/`} date={`${s.data.date} (${s.data.timezone})`} summary={s.data.description} kind="upcoming session" />
+        </div>
+      ))}
+      {past.map((s: any) => (
+        <div class="filter-item" data-topics={(s.data.topic as string[]).map(norm).join(' ')} data-status="past">
+          <ArticleCard title={s.data.title} href={`/learn/sessions/${slugOf(s)}/`} date={s.data.date} summary={s.data.description} kind="past session" />
+        </div>
+      ))}
+    </div>
+    <p><a href={url('/learn/sessions/')}>All sessions →</a></p>
+  </section>
+
+  <section aria-labelledby="h-guides" data-section>
+    <h2 id="h-guides">Guides & articles</h2>
+    <div class="card-grid" data-grid>
+      {guides.map((g: any) => (
+        <div class="filter-item" data-topics={norm(g.data.topic)}>
+          <ArticleCard title={g.data.title} href={`/learn/guides/${slugOf(g)}/`} date={`Verified ${g.data.lastVerified}`} tags={[g.data.topic]} summary={g.data.summary} kind={g.data.contentType} />
+        </div>
+      ))}
+      {articles.map((a: any) => (
+        <div class="filter-item" data-topics={(a.data.tags as string[]).map(norm).join(' ')}>
+          <ArticleCard title={a.data.title} href={`/learn/articles/${slugOf(a)}/`} date={a.data.date} tags={a.data.tags} summary={a.data.summary} kind="article" />
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <p id="noResults" class="card-simple" hidden>No matches for this topic and search. <button type="button" id="clearFilters" class="button-secondary small">Clear filters</button></p>
+</div>
+<script>
+  const input = document.getElementById('q') as HTMLInputElement | null;
+  const chips = Array.from(document.querySelectorAll('#topicFilters button'));
+  const items = Array.from(document.querySelectorAll('.filter-item'));
+  const sections = Array.from(document.querySelectorAll('[data-section]'));
+  const count = document.getElementById('resultCount');
+  const empty = document.getElementById('noResults');
+  const clear = document.getElementById('clearFilters');
+  let topic = window.location.hash.slice(1).toLowerCase();
+
+  function syncChips() {
+    chips.forEach((c) => {
+      const on = (c as HTMLElement).dataset.topic === topic;
+      c.setAttribute('aria-pressed', String(on));
+    });
+  }
+
+  function apply() {
+    const q = (input?.value ?? '').toLowerCase().trim();
+    let shown = 0;
+    items.forEach((el) => {
+      const topics = ((el as HTMLElement).dataset.topics ?? '').split(' ').filter(Boolean);
+      const hitTopic = !topic || topics.includes(topic);
+      const hitQuery = !q || (el.textContent ?? '').toLowerCase().includes(q);
+      const show = hitTopic && hitQuery;
+      (el as HTMLElement).hidden = !show;
+      if (show) shown++;
+    });
+    sections.forEach((sec) => {
+      const grid = sec.querySelector('[data-grid]');
+      const visible = grid ? Array.from(grid.children).some((c) => !(c as HTMLElement).hidden) : true;
+      (sec as HTMLElement).hidden = !visible;
+    });
+    if (empty) empty.hidden = shown !== 0;
+    if (count) {
+      const parts = [];
+      if (topic) parts.push(`topic “${topic}”`);
+      if (q) parts.push(`search “${q}”`);
+      count.textContent = parts.length ? `${shown} result${shown === 1 ? '' : 's'} for ${parts.join(' + ')}` : '';
+    }
+    syncChips();
+  }
+
+  chips.forEach((c) => c.addEventListener('click', () => {
+    topic = (c as HTMLElement).dataset.topic ?? '';
+    history.replaceState(null, '', topic ? `#${topic}` : window.location.pathname);
+    apply();
+  }));
+  input?.addEventListener('input', apply);
+  clear?.addEventListener('click', () => {
+    topic = '';
+    if (input) input.value = '';
+    history.replaceState(null, '', window.location.pathname);
+    apply();
+    input?.focus();
+  });
+  window.addEventListener('hashchange', () => {
+    topic = window.location.hash.slice(1).toLowerCase();
+    apply();
+  });
+  apply();
+</script>
+</BaseLayout>
+<style>
+  .page { padding-block: 3rem; } section { margin-top: var(--space-16); }
+  .searchbox { padding: 1rem 1.2rem; margin-bottom: 1rem; display: grid; gap: 0.4rem; }
+  input { background: var(--color-bg-elevated); border: 1px solid var(--color-border-strong); border-radius: var(--radius-md); color: var(--color-text); padding: 0.7rem 1rem; font-size: 1rem; }
+  .filters { display: flex; gap: 0.5rem; flex-wrap: wrap; margin: 1rem 0; }
+  .filters button { border: 1px solid var(--color-border-strong); border-radius: var(--radius-pill); padding: 0.4rem 0.95rem; color: var(--color-text); background: transparent; font: inherit; font-size: var(--text-sm); cursor: pointer; min-height: 44px; }
+  .filters button[aria-pressed="true"] { background: var(--color-accent); color: var(--color-text-on-accent); border-color: transparent; font-weight: 700; }
+  .filters button[aria-pressed="true"]::before { content: "✓ "; }
+  .muted { color: var(--color-text-muted); font-size: var(--text-sm); }
+  .small { min-height: 2.2rem; padding: 0.4rem 0.9rem; font-size: var(--text-sm); }
+  #noResults { margin-top: var(--space-12); display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+  #noResults[hidden] { display: none; }
+  .filter-item[hidden] { display: none; }
+  [data-section][hidden] { display: none; }
+</style>

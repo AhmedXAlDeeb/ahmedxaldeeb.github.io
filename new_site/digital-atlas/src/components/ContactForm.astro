@@ -1,0 +1,106 @@
+---
+import { site } from '../data/site';
+import { t, type Lang } from '../i18n/ui';
+
+interface Props { lang?: Lang }
+const { lang = 'en' } = Astro.props as Props;
+const f = t(lang, 'form');
+/**
+ * Inline contact form. Delivery strategy (never silently fails):
+ * - If `site.contactFormEndpoint` is set (Formspree/Web3Forms), POST JSON there
+ *   and show the service's success/error result.
+ * - Otherwise, compose an email in the visitor's mail app (mailto) with the
+ *   form contents addressed to Ahmed — the message only "sends" when they press send.
+ */
+const endpoint = site.contactFormEndpoint;
+---
+<form class="card-simple contact-form" id="contactForm" novalidate data-endpoint={endpoint} data-email={site.email} data-lang={lang}>
+  <div class="field">
+    <label for="cf-name">{f.name}</label>
+    <input id="cf-name" name="name" type="text" autocomplete="name" required minlength="2" />
+  </div>
+  <div class="field">
+    <label for="cf-email">{f.email}</label>
+    <input id="cf-email" name="email" type="email" autocomplete="email" required />
+    <p class="hint">{f.emailHint}</p>
+  </div>
+  <div class="field">
+    <label for="cf-topic">{f.topic}</label>
+    <select id="cf-topic" name="topic">
+      {f.topics.map((o: string) => <option>{o}</option>)}
+    </select>
+  </div>
+  <div class="field">
+    <label for="cf-message">{f.message}</label>
+    <textarea id="cf-message" name="message" required minlength="10" placeholder={f.messagePh}></textarea>
+  </div>
+  {!endpoint && (
+    <p class="hint" role="note">{f.noBackend}</p>
+  )}
+  <button class="button-primary" type="submit" id="cfSubmit">{f.send}</button>
+  <p class="form-status" id="cfStatus" role="status" aria-live="polite" hidden></p>
+</form>
+<script>
+  const STR = {
+    en: {
+      sentOk: 'Message sent. Ahmed will reply to your email address.',
+      sentFail: 'Sending failed. Please email Ahmed directly — your message was not delivered.',
+      mailAppOk: 'Your email app should now open with the message addressed to Ahmed. Press send there to deliver it.',
+      subject: '[Atlas contact]',
+    },
+    ar: {
+      sentOk: 'تم إرسال الرسالة. سيرد عليك أحمد على بريدك الإلكتروني.',
+      sentFail: 'فشل الإرسال. راسل أحمد بالبريد مباشرة — لم تصل رسالتك.',
+      mailAppOk: 'سيُفتح تطبيق البريد لديك والرسالة موجهة إلى أحمد. اضغط إرسال هناك لتسليمها.',
+      subject: '[تواصل الأطلس]',
+    },
+  } as const;
+  const form = document.getElementById('contactForm') as HTMLFormElement | null;
+  const status = document.getElementById('cfStatus');
+  const submit = document.getElementById('cfSubmit') as HTMLButtonElement | null;
+  function show(msg: string, kind: 'success' | 'error') {
+    if (!status) return;
+    status.hidden = false;
+    status.textContent = msg;
+    status.classList.remove('success', 'error');
+    status.classList.add(kind);
+  }
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!form || !form.checkValidity()) { form?.reportValidity(); return; }
+    const data = new FormData(form);
+    const name = String(data.get('name') || '');
+    const email = String(data.get('email') || '');
+    const topic = String(data.get('topic') || '');
+    const message = String(data.get('message') || '');
+    const endpoint = form.getAttribute('data-endpoint') || '';
+    const to = form.getAttribute('data-email') || '';
+    const S = STR[(form.getAttribute('data-lang') === 'ar' ? 'ar' : 'en') as keyof typeof STR];
+    if (endpoint) {
+      submit && (submit.disabled = true);
+      try {
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({ name, email, topic, message }),
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        form.reset();
+        show(S.sentOk, 'success');
+      } catch {
+        show(S.sentFail, 'error');
+      } finally {
+        submit && (submit.disabled = false);
+      }
+      return;
+    }
+    const subject = encodeURIComponent(`${S.subject} ${topic} — ${name}`);
+    const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\nTopic: ${topic}\n\n${message}`);
+    window.location.href = `mailto:${to}?subject=${subject}&body=${body}`;
+    show(S.mailAppOk, 'success');
+  });
+</script>
+<style>
+  .contact-form { max-width: 38rem; }
+  .hint { color: var(--color-text-muted); font-size: var(--text-sm); margin: 0.4rem 0 0; }
+</style>
