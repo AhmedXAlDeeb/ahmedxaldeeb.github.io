@@ -59,4 +59,24 @@ const sessions = defineCollection({
   }),
 });
 
-export const collections = { articles, guides, sessions };
+const opportunities = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/opportunities' }),
+  schema: z.object({
+    title: z.string(),
+    summary: z.string(),
+    org: z.string(),
+    location: z.string().default('Canada'),
+    funding: z.string(),
+    // YYYY-MM-DD or the literal "rolling".
+    deadline: z.string(),
+    posted: z.string(),
+    applyUrl: z.string(),
+    status: z.enum(['open', 'closed']).default('open'),
+    tags: z.array(z.string()).default([]),
+    lastVerified: z.string(),
+    sources: z.array(z.object({ title: z.string(), url: z.string() })).default([]),
+    draft: z.boolean().default(false),
+  }),
+});
+
+export const collections = { articles, guides, sessions, opportunities };

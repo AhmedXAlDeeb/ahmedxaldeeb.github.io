@@ -1,0 +1,62 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Tag from '../../../components/Tag.astro';
+import { getCollection, render } from 'astro:content';
+import { url, slugOf, live } from '../../../lib/url';
+import { t } from '../../../i18n/ui';
+
+export async function getStaticPaths() {
+  const items = (await getCollection('opportunities')).filter(live('ar'));
+  return items.map((entry: any) => ({ params: { slug: slugOf(entry) }, props: { entry } }));
+}
+const { entry } = Astro.props as any;
+const { Content } = await render(entry);
+const d = entry.data;
+const expired = d.deadline !== 'rolling' && !Number.isNaN(Date.parse(d.deadline)) && Date.parse(d.deadline) < Date.now();
+const state = d.status === 'closed' || expired ? 'closed' : 'open';
+const stale = Date.now() - new Date(d.lastVerified).getTime() > 365 * 24 * 3600 * 1000;
+---
+<BaseLayout title={`${d.title} — الفرص`} description={d.summary} type="article" lang="ar">
+<div class="container page narrow">
+  <nav aria-label="Breadcrumb"><a href={url('/ar/opportunities/')}>الفرص</a> / <span aria-current="page">{d.title}</span></nav>
+  <p class="badges">
+    <span class:list={['pill', state]}>{state === 'open' ? 'مفتوحة' : 'مغلقة'}</span>
+    <span class="badge">{t('ar', 'lastVerified')}: {d.lastVerified}</span>
+  </p>
+  {expired && <p class="warn" role="alert">⚠ انتهى هذا الموعد. تحقق من الصفحة الرسمية للدورة القادمة قبل أن تتصرف.</p>}
+  {!expired && stale && <p class="warn" role="alert">⚠ هذا الإعلان أقدم من ١٢ شهرًا. تحقق من المواعيد والتمويل في المصدر الرسمي قبل أن تتصرف.</p>}
+  <h1>{d.title}</h1>
+  <dl class="facts">
+    <div><dt>الجهة</dt><dd>{d.org}</dd></div>
+    <div><dt>الموقع</dt><dd>{d.location}</dd></div>
+    <div><dt>التمويل</dt><dd>{d.funding}</dd></div>
+    <div><dt>الموعد النهائي</dt><dd>{d.deadline === 'rolling' ? 'التقديم مستمر' : d.deadline}</dd></div>
+    <div><dt>نُشر بتاريخ</dt><dd>{d.posted}</dd></div>
+  </dl>
+  <p class="lede">{d.summary}</p>
+  {d.tags?.length ? <div class="tags">{d.tags.map((tt: string) => <Tag tag={tt} />)}</div> : null}
+  <div class="section--invert block">
+    <article class="prose"><Content /></article>
+  </div>
+  <p><a class="button-primary" href={d.applyUrl}>قدّم في الصفحة الرسمية ←</a></p>
+  {d.sources.length ? (<section><h2>{t('ar', 'sources')}</h2><ul>{d.sources.map((s: any) => <li><a href={s.url}>{s.title}</a></li>)}</ul></section>) : null}
+  <p class="disclaimer">{t('ar', 'disclaimer')}</p>
+</div>
+</BaseLayout>
+<style>
+  .page { padding-block: 3rem; } .narrow { max-width: var(--reading-width); }
+  h1 { font-size: var(--text-2xl); }
+  .badges { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+  .pill { border: 1px solid var(--color-border-strong); border-radius: var(--radius-pill); padding: 0.3rem 0.9rem; font-weight: 700; }
+  .pill.open { background: var(--color-accent); color: var(--color-text-on-accent); border-color: transparent; }
+  .badge { display: inline-block; border: 1px solid var(--color-border-strong); border-radius: var(--radius-pill); padding: 0.3rem 0.9rem; color: var(--color-text-secondary); }
+  .warn { border: 1px solid var(--color-accent); border-radius: var(--radius-md); padding: 0.8rem 1rem; }
+  .lede { color: var(--color-text-secondary); }
+  .facts { display: grid; gap: 0.5rem; margin: 1.5rem 0; padding: 1.2rem 1.4rem; border: 1px solid var(--color-border); border-radius: var(--radius-lg); background: var(--color-bg-elevated); }
+  .facts div { display: grid; grid-template-columns: 9rem 1fr; gap: 0.75rem; }
+  .facts dt { font-weight: 700; color: var(--color-accent); }
+  .facts dd { margin: 0; }
+  .tags { display: flex; gap: 0.4rem; margin: 0 0 1.5rem; flex-wrap: wrap; }
+  .disclaimer { color: var(--color-text-muted); font-size: var(--text-sm); border-top: 1px solid var(--color-divider); padding-top: 1rem; }
+  @media (max-width: 40rem) { .facts div { grid-template-columns: 1fr; gap: 0.1rem; } }
+</style>

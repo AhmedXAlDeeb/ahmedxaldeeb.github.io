@@ -27,7 +27,13 @@ const norm = (s: string) => s.toLowerCase().trim();
   </div>
   <div class="filters" role="group" aria-label="Filter by topic" id="topicFilters">
     <button type="button" data-topic="" aria-pressed="true">All</button>
-    {topics.map((t) => <button type="button" data-topic={norm(t)} aria-pressed="false">{t}</button>)}
+    {topics.slice(0, 5).map((t) => <button type="button" data-topic={norm(t)} aria-pressed="false">{t}</button>)}
+    {topics.length > 5 && (
+      <details class="topics-more">
+        <summary>More topics ({topics.length - 5})</summary>
+        {topics.slice(5).map((t) => <button type="button" data-topic={norm(t)} aria-pressed="false">{t}</button>)}
+      </details>
+    )}
   </div>
   <p class="muted" role="status" aria-live="polite" id="resultCount"></p>
 
@@ -48,7 +54,7 @@ const norm = (s: string) => s.toLowerCase().trim();
         </div>
       ))}
     </div>
-    <p><a href={url('/learn/sessions/')}>All sessions →</a></p>
+    <p><a href={url('/learn/sessions/')}>All sessions →</a> · <a href={url('/opportunities/')}>Looking for open positions? Browse opportunities →</a></p>
   </section>
 
   <section aria-labelledby="h-guides" data-section>
@@ -83,6 +89,9 @@ const norm = (s: string) => s.toLowerCase().trim();
     chips.forEach((c) => {
       const on = (c as HTMLElement).dataset.topic === topic;
       c.setAttribute('aria-pressed', String(on));
+    });
+    document.querySelectorAll('details.topics-more').forEach((d) => {
+      if (d.querySelector('button[aria-pressed="true"]')) (d as HTMLDetailsElement).open = true;
     });
   }
 
@@ -140,6 +149,10 @@ const norm = (s: string) => s.toLowerCase().trim();
   .filters button { border: 1px solid var(--color-border-strong); border-radius: var(--radius-pill); padding: 0.4rem 0.95rem; color: var(--color-text); background: transparent; font: inherit; font-size: var(--text-sm); cursor: pointer; min-height: 44px; }
   .filters button[aria-pressed="true"] { background: var(--color-accent); color: var(--color-text-on-accent); border-color: transparent; font-weight: 700; }
   .filters button[aria-pressed="true"]::before { content: "✓ "; }
+  details.topics-more { display: inline-block; }
+  details.topics-more[open] { display: contents; }
+  details.topics-more summary { list-style: none; display: inline-block; border: 1px dashed var(--color-border-strong); border-radius: var(--radius-pill); padding: 0.4rem 0.95rem; color: var(--color-text-muted); font-size: var(--text-sm); cursor: pointer; min-height: 44px; line-height: 1.6; }
+  details.topics-more summary::-webkit-details-marker { display: none; }
   .muted { color: var(--color-text-muted); font-size: var(--text-sm); }
   .small { min-height: 2.2rem; padding: 0.4rem 0.9rem; font-size: var(--text-sm); }
   #noResults { margin-top: var(--space-12); display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }

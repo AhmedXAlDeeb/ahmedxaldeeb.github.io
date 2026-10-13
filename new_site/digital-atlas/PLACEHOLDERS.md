@@ -15,6 +15,10 @@ Every unresolved `TODO(ahmed)` — resolve before launch. Full grouped list: `TO
 | guides/en | Study-permit checklist still a draft outline | open |
 | sessions | First session date + registration link (draft stub + AR empty state) | open |
 | sessions/en | Demo embed-check session — replace or delete | open |
+| opportunities | First real posting — done (mbzuai-msc-phd-2027, EN+AR) | done |
+| opportunities | Guelph Kotseruba draft — done (published EN+AR, form/lab/funding verified) | done |
+| opportunities | ELLIS PhD 2027 — done (published EN+AR, portal confirmed by user) | done |
+| opportunities | Inatel WAI Lab — done (published EN+AR on instruction; post-sourced extras hedged, language/fees/postdoc-call still open) | done |
 | contact (EN+AR) | Privacy/terms notes for booking tool | open |
 | story | CV PDF at public/cv.pdf | open |
 | public/og-default.svg | Export 1200×630 PNG | open |

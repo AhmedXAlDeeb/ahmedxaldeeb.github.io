@@ -1,0 +1,173 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
+import Tag from '../../components/Tag.astro';
+import { getCollection } from 'astro:content';
+import { url, slugOf, live } from '../../lib/url';
+
+const items = (await getCollection('opportunities')).filter(live('en')).sort((a: any, b: any) => {
+  if (a.data.status !== b.data.status) return a.data.status === 'open' ? -1 : 1;
+  if (a.data.deadline === 'rolling') return 1;
+  if (b.data.deadline === 'rolling') return -1;
+  return a.data.deadline.localeCompare(b.data.deadline);
+});
+const topics = [...new Set(items.flatMap((o: any) => o.data.tags as string[]))].sort((a, b) => a.localeCompare(b)) as string[];
+const norm = (s: string) => s.toLowerCase().trim();
+const isExpired = (d: string) => d !== 'rolling' && !Number.isNaN(Date.parse(d)) && Date.parse(d) < Date.now();
+---
+<BaseLayout title="Opportunities — Funded Positions & Scholarships" description="Funded MSc/PhD positions, scholarships, and internships — dated, sourced, and verified. Always confirm on the official page before applying.">
+<div class="container page">
+  <SectionHeading eyebrow="Opportunities" title="Open positions & scholarships" lede="Dated, sourced, and verified postings. Deadlines change — always confirm on the official page before applying." level={1} />
+  {items.length === 0 ? (
+    <div class="card-simple reveal">
+      <p><strong>No open postings right now.</strong> New funded positions and scholarships appear here as I verify them. <a href={url('/contact/')}>Tell me what you're looking for →</a></p>
+    </div>
+  ) : (
+  <>
+  <div class="searchbox card-simple">
+    <label for="q">Search openings</label>
+    <input id="q" type="search" placeholder="Filter by title, organization, or keyword…" autocomplete="off" />
+  </div>
+  <div class="filters" role="group" aria-label="Filter by topic" id="topicFilters">
+    <button type="button" data-topic="" aria-pressed="true">All</button>
+    {topics.slice(0, 5).map((t) => <button type="button" data-topic={norm(t)} aria-pressed="false">{t}</button>)}
+    {topics.length > 5 && (
+      <details class="topics-more">
+        <summary>More topics ({topics.length - 5})</summary>
+        {topics.slice(5).map((t) => <button type="button" data-topic={norm(t)} aria-pressed="false">{t}</button>)}
+      </details>
+    )}
+  </div>
+  <div class="filters" role="group" aria-label="Filter by status" id="statusFilters">
+    <button type="button" data-status="" aria-pressed="true">All statuses</button>
+    <button type="button" data-status="open" aria-pressed="false">Open</button>
+    <button type="button" data-status="closed" aria-pressed="false">Closed</button>
+  </div>
+  <div class="filters" role="group" aria-label="Sort openings" id="sortGroup">
+    <button type="button" data-sort="newest" aria-pressed="true">Newest added</button>
+    <button type="button" data-sort="nearest" aria-pressed="false">Nearest deadline</button>
+    <button type="button" data-sort="furthest" aria-pressed="false">Furthest deadline</button>
+  </div>
+  <p class="muted" role="status" aria-live="polite" id="resultCount"></p>
+  <div class="card-grid" data-grid>
+    {items.map((o: any) => {
+      const expired = isExpired(o.data.deadline);
+      const state = o.data.status === 'closed' || expired ? 'closed' : 'open';
+      return (
+      <div class="filter-item" data-topics={(o.data.tags as string[]).map(norm).join(' ')} data-status={state} data-posted={o.data.posted} data-deadline={o.data.deadline}>
+        <article class="card-simple card reveal">
+          <div class="meta"><span class:list={['pill', state]}>{state === 'open' ? 'Open' : 'Closed'}</span><time>Verified {o.data.lastVerified}</time></div>
+          <h3><a href={url(`/opportunities/${slugOf(o)}/`)}>{o.data.title}</a></h3>
+          <p class="org">{o.data.org} · {o.data.location}</p>
+          <p class="facts"><strong>{o.data.funding}</strong><span> · Deadline: {o.data.deadline === 'rolling' ? 'Rolling' : o.data.deadline}</span></p>
+          <p class="summary">{o.data.summary}</p>
+          {o.data.tags?.length ? <div class="tags">{o.data.tags.slice(0, 4).map((t: string) => <Tag tag={t} />)}</div> : null}
+        </article>
+      </div>);
+    })}
+  </div>
+  <p id="noResults" class="card-simple" hidden>No matches. <button type="button" id="clearFilters" class="button-secondary small">Clear filters</button></p>
+  </>
+  )}
+</div>
+<script>
+  const input = document.getElementById('q') as HTMLInputElement | null;
+  const topicBtns = Array.from(document.querySelectorAll('#topicFilters button'));
+  const statusBtns = Array.from(document.querySelectorAll('#statusFilters button'));
+  const items = Array.from(document.querySelectorAll('.filter-item'));
+  const count = document.getElementById('resultCount');
+  const empty = document.getElementById('noResults');
+  const clear = document.getElementById('clearFilters');
+  let topic = '';
+  let status = '';
+  let sort = 'newest';
+  function epoch(v: string | undefined, rollingFirst: boolean): number {
+    if (!v || v === 'rolling') return rollingFirst ? Number.POSITIVE_INFINITY : Number.NEGATIVE_INFINITY;
+    const t = Date.parse(v);
+    return Number.isNaN(t) ? (rollingFirst ? Number.POSITIVE_INFINITY : Number.NEGATIVE_INFINITY) : t;
+  }
+  function sortItems() {
+    const grid = document.querySelector('[data-grid]');
+    if (!grid) return;
+    const cards = Array.from(grid.children);
+    cards.sort((a, b) => {
+      const ea = a as HTMLElement, eb = b as HTMLElement;
+      if (sort === 'nearest') {
+        const d = epoch(ea.dataset.deadline, false) - epoch(eb.dataset.deadline, false);
+        // Rolling (no date) sinks to the end; tie-break by newest posted.
+        const ra = ea.dataset.deadline === 'rolling' ? 1 : 0, rb = eb.dataset.deadline === 'rolling' ? 1 : 0;
+        return ra - rb || (Number.isNaN(d) ? 0 : d) || ((eb.dataset.posted ?? '').localeCompare(ea.dataset.posted ?? ''));
+      }
+      if (sort === 'furthest') {
+        const ra = ea.dataset.deadline === 'rolling' ? 0 : 1, rb = eb.dataset.deadline === 'rolling' ? 0 : 1;
+        if (ra !== rb) return ra - rb;
+        return epoch(eb.dataset.deadline, true) - epoch(ea.dataset.deadline, true);
+      }
+      return (eb.dataset.posted ?? '').localeCompare(ea.dataset.posted ?? '');
+    });
+    cards.forEach((c) => grid.appendChild(c));
+  }
+  function sync(btns: Element[], val: string, attr: string) {
+    btns.forEach((c) => c.setAttribute('aria-pressed', String((c as HTMLElement).dataset[attr] === val)));
+  }
+  function apply() {
+    const q = (input?.value ?? '').toLowerCase().trim();
+    let shown = 0;
+    items.forEach((el) => {
+      const topics = ((el as HTMLElement).dataset.topics ?? '').split(' ').filter(Boolean);
+      const st = (el as HTMLElement).dataset.status ?? '';
+      const show = (!topic || topics.includes(topic)) && (!status || st === status) && (!q || (el.textContent ?? '').toLowerCase().includes(q));
+      (el as HTMLElement).hidden = !show;
+      if (show) shown++;
+    });
+    if (empty) empty.hidden = shown !== 0;
+    if (count) count.textContent = (topic || status || q) ? `${shown} result${shown === 1 ? '' : 's'}` : '';
+    sync(topicBtns, topic, 'topic');
+    sync(statusBtns, status, 'status');
+    document.querySelectorAll('details.topics-more').forEach((d) => {
+      if (d.querySelector('button[aria-pressed="true"]')) (d as HTMLDetailsElement).open = true;
+    });
+  }
+  topicBtns.forEach((c) => c.addEventListener('click', () => { topic = (c as HTMLElement).dataset.topic ?? ''; apply(); }));
+  statusBtns.forEach((c) => c.addEventListener('click', () => { status = (c as HTMLElement).dataset.status ?? ''; apply(); }));
+  const sortBtns = Array.from(document.querySelectorAll('#sortGroup button'));
+  sortBtns.forEach((c) => c.addEventListener('click', () => {
+    sort = (c as HTMLElement).dataset.sort ?? 'newest';
+    sortBtns.forEach((x) => x.setAttribute('aria-pressed', String(x === c)));
+    sortItems();
+  }));
+  input?.addEventListener('input', apply);
+  clear?.addEventListener('click', () => { topic = ''; status = ''; if (input) input.value = ''; apply(); input?.focus(); });
+  sortItems();
+  apply();
+</script>
+</BaseLayout>
+<style>
+  .page { padding-block: 3rem; }
+  .searchbox { padding: 1rem 1.2rem; margin-bottom: 1rem; display: grid; gap: 0.4rem; }
+  input { background: var(--color-bg-elevated); border: 1px solid var(--color-border-strong); border-radius: var(--radius-md); color: var(--color-text); padding: 0.7rem 1rem; font-size: 1rem; }
+  .filters { display: flex; gap: 0.5rem; flex-wrap: wrap; margin: 1rem 0; }
+  .filters button { border: 1px solid var(--color-border-strong); border-radius: var(--radius-pill); padding: 0.4rem 0.95rem; color: var(--color-text); background: transparent; font: inherit; font-size: var(--text-sm); cursor: pointer; min-height: 44px; }
+  .filters button[aria-pressed="true"] { background: var(--color-accent); color: var(--color-text-on-accent); border-color: transparent; font-weight: 700; }
+  .filters button[aria-pressed="true"]::before { content: "✓ "; }
+  details.topics-more { display: inline-block; }
+  details.topics-more[open] { display: contents; }
+  details.topics-more summary { list-style: none; display: inline-block; border: 1px dashed var(--color-border-strong); border-radius: var(--radius-pill); padding: 0.4rem 0.95rem; color: var(--color-text-muted); font-size: var(--text-sm); cursor: pointer; min-height: 44px; line-height: 1.6; }
+  details.topics-more summary::-webkit-details-marker { display: none; }
+  .muted { color: var(--color-text-muted); font-size: var(--text-sm); }
+  .small { min-height: 2.2rem; padding: 0.4rem 0.9rem; font-size: var(--text-sm); }
+  .card { display: flex; flex-direction: column; gap: 0.55rem; }
+  .card h3 { margin: 0; font-size: 1.1rem; }
+  .card h3 a { color: var(--color-text); text-decoration: none; }
+  .meta { display: flex; gap: 0.5rem; align-items: center; font-size: var(--text-xs); color: var(--color-text-muted); }
+  .pill { border: 1px solid var(--color-border-strong); border-radius: var(--radius-pill); padding: 0.15rem 0.6rem; font-weight: 700; }
+  .pill.open { background: var(--color-accent); color: var(--color-text-on-accent); border-color: transparent; }
+  .org, .facts { margin: 0; font-size: var(--text-sm); }
+  .org { color: var(--color-text-secondary); }
+  .facts { color: var(--color-text); }
+  .summary { color: var(--color-text-muted); margin: 0; font-size: var(--text-sm); }
+  .tags { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+  #noResults { margin-top: var(--space-12); display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+  #noResults[hidden] { display: none; }
+  .filter-item[hidden] { display: none; }
+</style>

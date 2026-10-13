@@ -19,7 +19,7 @@ const home = lang === 'ar' ? url('/ar/') : url('/');
 
 // Language switcher target: link the real mirror when it exists,
 // otherwise fall back to the other language's home (never a dead URL).
-const arRoots = new Set(['/', '/story/', '/mentorship/', '/learn/', '/learn/sessions/', '/contact/']);
+const arRoots = new Set(['/', '/story/', '/mentorship/', '/learn/', '/learn/sessions/', '/opportunities/', '/contact/']);
 const arSlugs = new Set<string>();
 for (const coll of ['articles', 'guides', 'sessions'] as const) {
   for (const e of (await getCollection(coll)) as any[]) {

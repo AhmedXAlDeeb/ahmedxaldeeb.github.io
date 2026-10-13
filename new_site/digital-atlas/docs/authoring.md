@@ -18,6 +18,12 @@ New article? Scaffold it — `npm run new:article -- --slug=<slug> --title="<tit
 
 `title, description, date (ISO with offset), timezone, durationMin, status (upcoming|past), topic[], registrationUrl, videoUrl, slidesUrl, takeaways[], draft`. Upcoming shows registration; past embeds video. `Event` schema auto for upcoming with real data.
 
+## Opportunities (`src/content/opportunities/<lang>/*.md`)
+
+One file per posting, mirrored EN+AR with the same slug. `title, summary, org, location, funding, deadline ("YYYY-MM-DD" or "rolling"), posted, applyUrl, status (open|closed), tags[], lastVerified, sources[{title,url}], draft`. Listing auto-sorts open first, then nearest deadline. Past deadlines and >12-month verifications get automatic warning banners. Never present deadlines/funding as current without a verified date — keep `draft: true` until details are confirmed.
+
+Publishing a real opportunity? Fill `.opencode/skills/opportunity-post/intake-template.md` and ask the agent to run the `opportunity-post` skill — it validates, writes both files, and verifies the build.
+
 ## Contact form endpoint
 
 Set `contactFormEndpoint` in `src/data/site.ts` (Formspree/Web3Forms URL). Empty = mailto-compose fallback.

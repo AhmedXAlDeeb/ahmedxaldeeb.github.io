@@ -91,12 +91,14 @@ export const navLabels: Record<Lang, { label: string; href: string }[]> = {
     { label: 'Story', href: '/story/' },
     { label: 'Mentorship', href: '/mentorship/' },
     { label: 'Learn', href: '/learn/' },
+    { label: 'Opportunities', href: '/opportunities/' },
     { label: 'Contact', href: '/contact/' },
   ],
   ar: [
     { label: 'قصتي', href: '/ar/story/' },
     { label: 'الإرشاد', href: '/ar/mentorship/' },
     { label: 'تعلّم', href: '/ar/learn/' },
+    { label: 'الفرص', href: '/ar/opportunities/' },
     { label: 'تواصل', href: '/ar/contact/' },
   ],
 };

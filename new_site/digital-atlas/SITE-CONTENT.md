@@ -147,7 +147,16 @@ New articles: scaffold with `npm run new:article` (see `docs/article-template.md
 
 ---
 
-## 6. Global chrome
+## 6. Opportunities — `/opportunities/` · `/ar/opportunities/`
+
+- Hub H1: `Open positions & scholarships` + lede (dated/sourced/verified; confirm on official page). Search + topic chips + All/Open/Closed filter; empty state until first real posting. AR mirror (`الفرص` …).
+- Cards: Open/Closed pill · org + location · funding + deadline (or Rolling) · summary · tags · verified date.
+- Detail: status/funding/deadline/verified badges · expired + stale auto-banners · fact table (org/location/funding/deadline/posted) · body · `Apply on the official page →` CTA · sources · disclaimer. AR mirror.
+- Schema per posting: `title/summary/org/location/funding/deadline|rolling/posted/applyUrl/open|closed/tags/lastVerified/sources/draft`. EN+AR same slug.
+
+---
+
+## 7. Global chrome
 - Header: keep. Add the seats badge to the mobile menu footer.
 - Footer tagline — EN: `From where you are to a funded degree in Canada, step by step.` · AR: `من حيث أنت إلى درجة ممولة في كندا، خطوة بخطوة.`
 - 404: unchanged.
