@@ -49,6 +49,8 @@ Remaining: `ielts-start-here` + `ielts-listening-strategy` (EN+AR, `ielts-prep` 
 
 - [x] MBZUAI MSc/PhD 2027 (EN+AR, slug `mbzuai-msc-phd-2027`) published 2026-10-13, verified, deadline 2026-12-15.
 - [x] Guelph Kotseruba MSc/PhD 2027 (EN+AR, slug `uoguelph-kotseruba-msc-phd-2027`) published 2026-10-13: lab page + program pages + funding calculator + interest form verified; starts corrected to Summer/Fall 2027 + Winter 2028 (Winter 2027 officially closed); deadline 2027-03-01 corroborated as earliest open date.
+- [x] Auckland Doctoral Scholarship 2027 (EN+AR, slug `university-of-auckland-doctoral-scholarship-2027`) published 2026-10-15: all 6 official URLs alive, $35,468/42mo/1-Nov verified on-page.
+- [x] Calgary De Carli PhD 2027 (EN+AR, slug `ucalgary-de-carli-phd-security-privacy-2027`) published 2026-10-15: flyer + program page + faculty profile verified; funding genuinely unstated, published with explicit ask-the-supervisor line per relaxed rule.
 - [x] ELLIS PhD 2027 (EN+AR, slug `ellis-phd-program-2027`) published 2026-10-13: portal confirmed by user, everything else verified from official pages.
 - [x] Inatel WAI Lab MSc/PhD/Postdoc 2027 (EN+AR, slug `inatel-wai-lab-msc-phd-postdoc-2027`) published 2026-10-13 on user instruction; core calendar/funding/professors verified from official pages, post-sourced extras kept hedged ("may offer" / "arranged directly"). Still open: instruction language, fee/document details, live postdoc call, joint-degree confirmations.
 - [ ] Re-verify open postings regularly; past deadlines auto-banner but need manual `status: closed` or removal.

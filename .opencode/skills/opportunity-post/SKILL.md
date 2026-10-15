@@ -11,7 +11,10 @@ You publish one funded opportunity to `new_site/digital-atlas` in English and Ar
 
 Ask the user to fill `intake-template.md` (same folder). Every field is required
 except `sources` (recommended) and `tagsAr` (defaults to translating `tags`).
-If any required field is missing, ask for it — never invent it.
+`funding` is recommended, not required: if no official source states funding,
+write `unknown` and the files will carry an explicit "not stated — ask before
+applying" line instead of a figure. Never invent a funding figure.
+If any other required field is missing, ask for it — never invent it.
 
 ## Steps
 
@@ -60,8 +63,11 @@ If any required field is missing, ask for it — never invent it.
 
 ## Hard rules
 
-- Deadlines, funding amounts, and eligibility are stated **only** from official
-  pages, each with a `lastVerified` date. The templates auto-banner expired and
+- Deadlines and eligibility are stated **only** from official
+  pages, each with a `lastVerified` date. Funding figures likewise — but when
+  no official source states funding, an explicit "not stated on the official
+  announcement — ask the supervisor before applying" line (both languages) is
+  acceptable and does not block publishing. The templates auto-banner expired and
   stale postings — do not hand-edit around those banners.
 - `draft: true` until every required field is confirmed. A half-filled posting
   never ships.

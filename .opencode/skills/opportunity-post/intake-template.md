@@ -12,8 +12,8 @@ summary_en: ""              # *(required)* one sentence: what + who it funds
 summary_ar: ""              # *(required)*
 org: ""                     # *(required)* university / body + department
 location: ""                # *(required)* e.g. Toronto, Canada
-funding: ""                 # *(required)* what is covered, e.g. Fully funded (tuition + stipend)
-funding_ar: ""              # *(required)*
+funding: ""                 # recommended: what is covered. If genuinely unstated, write "unknown" — the files will say so explicitly instead of blocking
+funding_ar: ""              # recommended; "unknown" allowed with the same explicit wording
 deadline: ""                # *(required)* YYYY-MM-DD or: rolling
 posted: ""                  # default: today
 applyUrl: ""                # *(required)* official application page
